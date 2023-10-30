@@ -8,6 +8,8 @@ export default function Home() {
   const [ind, setInd] = useState(null);
   const [len, setLen] = useState(null);
   // ^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$
+  const [index, setIndex] = useState(0);
+  const [pos, setPos] = useState(0);
   useEffect(() => {
     const value = normalText;
     const specialCharacters = ["@", "*", "%", ".", "#", " ", "^", "!"];
@@ -54,26 +56,46 @@ export default function Home() {
     }
     const filter = arr.filter((item) => item !== "");
 
-    console.log(filter);
-    let k = "";
+    let regexMakingValue = "";
     filter.forEach((item) => {
       if ([...item].some((char) => specialCharacters.includes(char))) {
         // const d = parts.push(value[i]);
-        const vd = `[@#$%^&*()]` + `{${item.length}}`;
-        k = k + vd;
+        const vd = `[${item}]` + `{${item.length}}`;
+        regexMakingValue = regexMakingValue + vd;
       } else if (Number(item)) {
         const vd = `[1-9]` + `{${item.length}}`;
-        k = k + vd;
+        regexMakingValue = regexMakingValue + vd;
       } else {
         const vd = `[a-zA-Z]` + `{${item.length}}`;
-        k = k + vd;
+        regexMakingValue = regexMakingValue + vd;
       }
     });
 
-    let x = `[^${ind}]`;
+    let x = ind ? `[^${ind}]` : ``;
     let l = len ? `{${len}}` : `{10}`;
-    const reg = new RegExp(x + k);
-    console.log(reg);
+    let reg;
+    if (pos) {
+      console.log(index, regexs);
+      const t = [...regexs.toString()];
+      let d = "";
+      for (let i = 1; i < t.length - 1; i++) {
+        d = d + t[i];
+      }
+      const v = [...d].map((item, indexs) => {
+        if (indexs === index - 1) {
+          console.log(index, pos);
+          item = pos;
+          return item;
+        }
+        return item;
+      });
+      console.log(v.join(""));
+      reg = new RegExp(v.join(""));
+      console.log(regexs);
+    } else {
+      reg = new RegExp(x + regexMakingValue);
+    }
+
     // console.log(reg);
     // console.log(special);
     // console.log(parts.join(""));
@@ -83,27 +105,51 @@ export default function Home() {
     // console.log(newR);
     // let x = `[^d]`;
     // const vds = new RegExp("^" + "t" + x + newR);
-
     setRegexs(reg);
     // const newRegex = vds.toString();
     // const v = newR.replace(newR[ind], ind);
 
     // const vds1 = new RegExp(v);
-  }, [normalText, ind]);
+  }, [normalText, ind, index, pos]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>
-        <h1>{regexs.toString()}</h1>
+        {index && (
+          <input
+            className="border-2"
+            onChange={(e) => {
+              setPos(e.target.value);
+            }}
+          />
+        )}
+        <h1 className="text-lg py-3 px-5 shadow-md rounded-md">
+          regex :- {regexs.toString()}
+        </h1>
+        <div className="flex relative">
+          {[...regexs.toString()].map((item, idx) => {
+            return (
+              <h1
+                key={idx}
+                onClick={() => {
+                  setIndex(idx);
+                }}
+                className="mx-1"
+              >
+                {item}{" "}
+              </h1>
+            );
+          })}
+        </div>
         <input
           onChange={(e) => setNormalText(e.target.value)}
-          className="border-2"
+          className="text-lg py-3 px-5 shadow-md rounded-md"
         />
-        <input
+        {/* <input
           onChange={(e) => setInd(e.target.value)}
           className="border-2"
           placeholder="enter your avoid characcters"
-        />
+        /> */}
         {/* <input
           onChange={(e) => setLen(e.target.value)}
           className="border-2"
