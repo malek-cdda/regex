@@ -49,21 +49,45 @@ export const separateCharacter = (value, specialSignCharacters) => {
 export const regexProcess = (value, specialCharacters) => {
   let regexMakingValue = "";
   value.forEach((item) => {
+    let c = 0;
     // checkinG character is an special or not
     if ([...item].some((char) => specialCharacters.includes(char))) {
       // const d = parts.push(value[i]);
-      const regexAcceptValue = `[${item}]` + `{${item.length}}`;
-      regexMakingValue = regexMakingValue + regexAcceptValue;
+      const upperAcceptValue = `[${item}]` + `{${item.length}}`;
+      regexMakingValue = regexMakingValue + upperAcceptValue;
     }
     // checking number of character
     else if (Number(item)) {
-      const regexAcceptValue = `[1-9]` + `{${item.length}}`;
-      regexMakingValue = regexMakingValue + regexAcceptValue;
+      const upperAcceptValue = `[1-9]` + `{${item.length}}`;
+      regexMakingValue = regexMakingValue + upperAcceptValue;
     }
     // checking word of character
     else {
-      const regexAcceptValue = `[a-zA-Z]` + `{${item.length}}`;
-      regexMakingValue = regexMakingValue + regexAcceptValue;
+      let upperAcceptValue = "";
+      let lowerAcceptValue = "";
+      let uppercaseCount = 0;
+      let lowercaseCount = 0;
+      for (let i = 0; i < item.length; i++) {
+        const char = item.charAt(i);
+        if (/[A-Z]/.test(char)) {
+          uppercaseCount++;
+        } else if (/[a-z]/.test(char)) {
+          lowercaseCount++;
+        }
+      }
+      if (uppercaseCount > 0) {
+        upperAcceptValue = `[A-Z]` + `{${uppercaseCount}}`;
+      }
+      if (lowercaseCount > 0) {
+        lowerAcceptValue = `[a-z]` + `{${lowercaseCount}}`;
+      }
+      console.log(uppercaseCount, lowercaseCount);
+      if (uppercaseCount > 0 && lowercaseCount > 0) {
+        regexMakingValue = `[a-zA-Z]` + `{${uppercaseCount + lowercaseCount}}`;
+      } else {
+        regexMakingValue =
+          regexMakingValue + lowerAcceptValue + upperAcceptValue;
+      }
     }
   });
   return regexMakingValue;
