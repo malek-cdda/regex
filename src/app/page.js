@@ -17,7 +17,7 @@ export default function Home() {
   const [content, setContent] = useState("");
   useEffect(() => {
     const specialSignCharacters = ["@", "*", "%", ".", "#", " ", "^", "!"];
-    //  seperate all string character function
+    //  separate all string character function
     const separateWord = separateCharacter(
       regexConvertText,
       specialSignCharacters
@@ -57,15 +57,27 @@ export default function Home() {
   return (
     <main className="  p-24">
       <div>
-        <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 flex space-x-2 border-none outline-none">
-          <h1 className="capitalize">regex:</h1>
-          <h1
-            contentEditable={true}
-            onInput={handleContentChange}
-            suppressContentEditableWarning={true}
-          >
-            {regexString}
-          </h1>
+        <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 flex space-x-2 border-none outline-none   relative">
+          <div className="flex space-x-2">
+            <h1 className="capitalize">regex:</h1>
+            <h1
+              contentEditable={true}
+              onInput={handleContentChange}
+              suppressContentEditableWarning={true}
+            >
+              {!regexConvertText ? "" : regexString}
+            </h1>
+          </div>
+          <div className="group   absolute  top-1 right-7">
+            <span className="cursor-pointer">
+              <AiFillInfoCircle />
+            </span>
+            <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
+              specified test value does not match the generated regular
+              expression, the description of the regular expression will be
+              displayed as a validation error directly below the te
+            </div>
+          </div>
         </div>
         <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
           <div>
@@ -124,6 +136,16 @@ export default function Home() {
             <h6 className="text-sm">
               {checkUpdateValue == false ? "not matching" : ""}
             </h6>
+          </div>
+          <div className="group   absolute  top-1 right-7">
+            <span className="cursor-pointer">
+              <AiFillInfoCircle />
+            </span>
+            <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
+              specified test value does not match the generated regular
+              expression, the description of the regular expression will be
+              displayed as a validation error directly below the te
+            </div>
           </div>
         </div>
       </div>
