@@ -27,12 +27,12 @@ export default function Home() {
     //  string convert process in convert normal string to regex process function
     const regexMakingValue = regexProcess(separateWord, specialSignCharacters);
     //  start value set
-    let startValue = startEndValue.start ? startEndValue.start : "";
+    let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
     // endvalu set
-    let endValue = startEndValue.end ? startEndValue.end : "";
+    let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     //  making regex process
     const regexValue = new RegExp(
-      `[${startValue}]` + regexMakingValue + `[${endValue}]` + `$`
+      startValue + regexMakingValue + endValue + `$`
     );
 
     setRegex(regexValue);
@@ -136,8 +136,9 @@ export default function Home() {
         </div>
       </div>
       {/* start and end value given here  */}
-      <div>
+      <div className="flex justify-between">
         <button
+          className="border text-green-600 bg-gray-50 px-5 py-2 "
           onClick={(e) => {
             setStartEndValue({
               ...startEndValue,
@@ -148,6 +149,7 @@ export default function Home() {
           start with f
         </button>
         <button
+          className="border text-green-600 bg-gray-50 px-5 py-2 "
           onClick={(e) => {
             setStartEndValue({
               ...startEndValue,
