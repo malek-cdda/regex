@@ -68,39 +68,3 @@ export const regexProcess = (value, specialCharacters) => {
   });
   return regexMakingValue;
 };
-
-// REGEX MAKING PROCESS FUNCTION
-export const regexMakingValueProcess = (
-  vs1,
-  index,
-  regexMakingValue,
-  x,
-  regexs
-) => {
-  let reg;
-  if (vs1?.length && index?.index) {
-    // console.log(index, regexs);
-    const t = [...regexs.toString()];
-    let d = "";
-    console.log(vs1);
-    for (let i = 1; i < t.length - 1; i++) {
-      d = d + t[i];
-    }
-    const v = [...d].map((item, indexs) => {
-      if (vs1.some((item) => item?.index - 1 == indexs)) {
-        // console.log(index, pos);
-        const vValue = vs1.find((item) => item?.index - 1 == indexs);
-        item = vValue.value;
-        return item;
-      }
-      setIndex({});
-      return item;
-    });
-    //
-
-    reg = new RegExp(v.join(""));
-  } else {
-    reg = new RegExp(x + regexMakingValue);
-  }
-  return reg;
-};
