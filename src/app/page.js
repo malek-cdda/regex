@@ -1,11 +1,11 @@
 "use client";
-import { seperateCharacter } from "@/components/regex";
+import { regexProcess, separateCharacter } from "@/components/regex";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [regexs, setRegexs] = useState("");
-  const [normalText, setNormalText] = useState("");
+  const [regexConvertText, setRegexConvertText] = useState("");
   const [ind, setInd] = useState(null);
   const [len, setLen] = useState(null);
   const [index, setIndex] = useState({});
@@ -18,67 +18,19 @@ export default function Home() {
   const [vs1, setVs1] = useState([]);
   const [indexss, setIndexss] = useState({});
   useEffect(() => {
-    const regexConvertText = normalText;
-    const specialCharacters = ["@", "*", "%", ".", "#", " ", "^", "!"];
-    // const arr = [];
-    // const parts = [];
-    // const special = [];
-    // let arr1 = [];
-    // // seperate string character
-    // for (let i = 0; i < value.length; i++) {
-    //   if (specialCharacters.includes(value[i])) {
-    //     special.push(value[i]);
-    //     arr.push(parts.join(""));
-    //     arr.push(arr1.join(""));
-    //     parts.length = 0;
-    //     arr1.length = 0;
-    //   } else if (Number(value[i])) {
-    //     arr1.push(value[i]);
-    //     arr.push(parts.join(""));
-    //     arr.push(special.join(""));
-    //     parts.length = 0;
-    //     special.length = 0;
-    //   } else {
-    //     parts.push(value[i]);
-    //     arr.push(special.join(""));
-    //     arr.push(arr1.join(""));
-    //     arr1.length = 0;
-    //     special.length = 0;
-    //   }
-    // }
-    // // join all string
-    // if (arr1.length > 0) {
-    //   arr.push(arr1.join(""));
-    // }
-    // if (special.length > 0) {
-    //   arr.push(special.join(""));
-    // }
-    // if (parts.length > 0) {
-    //   arr.push(parts.join(""));
-    // }
-    const arr = seperateCharacter(regexConvertText);
-    // remove empty string
-    const filter = arr.filter((item) => item !== "");
-
-    let regexMakingValue = "";
-    //  creating for regex acceptable string
-    filter.forEach((item) => {
-      if ([...item].some((char) => specialCharacters.includes(char))) {
-        // const d = parts.push(value[i]);
-        const vd = `[${item}]` + `{${item.length}}`;
-        regexMakingValue = regexMakingValue + vd;
-      } else if (Number(item)) {
-        const vd = `[1-9]` + `{${item.length}}`;
-        regexMakingValue = regexMakingValue + vd;
-      } else {
-        const vd = `[a-zA-Z]` + `{${item.length}}`;
-        regexMakingValue = regexMakingValue + vd;
-      }
-    });
+    const specialSignCharacters = ["@", "*", "%", ".", "#", " ", "^", "!"];
+    //  seperate all string character function
+    const separateWord = separateCharacter(
+      regexConvertText,
+      specialSignCharacters
+    );
+    //  string convert process in convert normal string to regex process function
+    const regexMakingValue = regexProcess(separateWord, specialSignCharacters);
 
     let x = ind ? `[^${ind}]` : ``;
     let l = len ? `{${len}}` : `{10}`;
     let reg;
+
     // updating regex length
     if (vs1?.length && index?.index) {
       // console.log(index, regexs);
@@ -106,7 +58,7 @@ export default function Home() {
     }
 
     setRegexs(reg);
-  }, [normalText, ind, vs1]);
+  }, [regexConvertText, ind, vs1]);
   // console.log("index", index);
   // const letters = new Set(changeLen);
 
@@ -171,7 +123,7 @@ export default function Home() {
           })}
         </div>
         <input
-          onChange={(e) => setNormalText(e.target.value)}
+          onChange={(e) => setRegexConvertText(e.target.value)}
           className="text-lg py-3 px-5 shadow-md rounded-md"
         />
         {/* <input
