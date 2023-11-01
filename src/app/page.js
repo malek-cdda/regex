@@ -1,9 +1,6 @@
 "use client";
-import {
-  regexMakingValueProcess,
-  regexProcess,
-  separateCharacter,
-} from "@/components/regex";
+
+import { regexProcess, separateCharacter } from "@/components/regex";
 import { AiFillInfoCircle } from "react-icons/ai";
 
 import { useEffect, useState } from "react";
@@ -17,6 +14,8 @@ export default function Home() {
   const [content, setContent] = useState("");
   // start and end value initial state here
   const [startEndValue, setStartEndValue] = useState({});
+  // testing value initialize
+  const [testValue, setTestValue] = useState("");
   useEffect(() => {
     const specialSignCharacters = ["@", "*", "%", ".", "#", " ", "^", "!"];
     //  separate all string character function
@@ -28,30 +27,31 @@ export default function Home() {
     const regexMakingValue = regexProcess(separateWord, specialSignCharacters);
     //  start value set
     let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
-    // endvalu set
+    // end value set
     let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     //  making regex process
     const regexValue = new RegExp(
       startValue + regexMakingValue + endValue + `$`
     );
 
+    regexValue.test(testValue) ? console.log("true") : console.log("false");
     setRegex(regexValue);
-  }, [regexConvertText, startEndValue]);
+  }, [regexConvertText, startEndValue, testValue]);
   // convert regex to string
 
+  // Initial  update regx value get
   const regexToString = regex.toString();
+
   let regexString = "";
   for (let i = 1; i < regexToString.toString().length - 1; i++) {
     regexString = regexString + regexToString[i];
   }
-  // Initial  update regx value get
   const handleContentChange = (event) => {
     setContent(event.target.textContent);
+    checkingRegex(testValue, "updateText");
   };
-
   // regex check if regex valid return true or false
   const checkingRegex = (value, type) => {
-    console.log(type);
     if (type == "normalText") {
       regex.test(value) ? setCheckValue(true) : setCheckValue(false);
     } else {
@@ -60,7 +60,7 @@ export default function Home() {
       checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
     }
   };
-  console.log(startEndValue);
+
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -90,12 +90,13 @@ export default function Home() {
           <input
             className="w-full focus:outline-none border-b-2 "
             placeholder="test value"
-            onChange={(e) =>
+            onChange={(e) => {
+              setTestValue(e.target.value);
               checkingRegex(
                 e.target.value,
                 content ? "updateText" : "normalText"
-              )
-            }
+              );
+            }}
           />
           <span className="text-[8px] text-red-400  ">
             {checkValue == false ? "match the requested form" : ""}
@@ -121,7 +122,10 @@ export default function Home() {
           <input
             className="w-full focus:outline-none border-b-2 "
             placeholder="specify string to match "
-            onChange={(e) => setRegexConvertText(e.target.value)}
+            onChange={(e) => {
+              setTestValue(e.target.value);
+              setRegexConvertText(e.target.value);
+            }}
           />
         </div>
         <div className="group   absolute  top-1 right-7">
