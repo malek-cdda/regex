@@ -32,17 +32,19 @@ export default function Home() {
       specialSignCharacters
     );
     //  string convert process in convert normal string to regex process function
-    const regexMakingValue = regexProcess(separateWord, specialSignCharacters);
+    const { regexMakingValue, newLen } = regexProcess(
+      separateWord,
+      specialSignCharacters
+    );
     //  start value set
     let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
     // end value set
     let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     // setRegx value length
-    let regexLen = regexMakingValue.length;
 
     //  making regex process
     const regexValue = new RegExp(
-      startValue + regexMakingValue + endValue + `{${regexLen + 16}}$`
+      startValue + regexMakingValue + endValue + `{${newLen}}$`
     );
 
     regexValue.test(testValue) ? console.log("true") : console.log("false");
@@ -175,13 +177,6 @@ export default function Home() {
           end with with b
         </button>
       </div>
-
-      <GenerateFCMToken
-        firebaseConfig={firebaseConfig}
-        vapidKey="BC2p1ft9yE8FIUJvUSOwTz4MMFZROoHEhPY0_83Dzfw9W7QvmOr4ueIYvB3fnXduzGkCfqLB6L0vX_p1DxV_Bw4"
-        inAppNotification={true}
-        getDeviceToken={(data) => console.log(data)}
-      />
     </main>
   );
 }

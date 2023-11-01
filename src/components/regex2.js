@@ -41,8 +41,11 @@ export const regexProcess = (value, specialCharacters) => {
       k = k + item;
     }
   });
+  let upperAcceptValue = "[]";
+  if (v.length > 0) {
+    upperAcceptValue = `(?=.*[${v}]{${v.length}})`;
+  }
 
-  const upperAcceptValue = `(?=.*[${v}]{${v.length}})`;
   regexMakingValue = regexMakingValue + upperAcceptValue;
   //   const upperAcceptValue2 = `(?=.*[a-z-A-Z1-9]{${k.length}})`;
   //   regexMakingValue = regexMakingValue + upperAcceptValue2;
@@ -121,10 +124,10 @@ export const regexProcess = (value, specialCharacters) => {
   //   if (k && v) {
   //     newLen = k.length + v.length;
   //   }
-  let newLen = lowercaseCount + uppercaseCount + numberCount;
-  if (v.length > 0) {
-    newLen = 12;
-  }
+  let newLen = lowercaseCount + uppercaseCount + numberCount + v.length;
+  //   if (v.length > 0) {
+  //     newLen = v.length + k.length;
+  //   }
 
   regexMakingValue =
     acceptValue1 +
@@ -133,7 +136,7 @@ export const regexProcess = (value, specialCharacters) => {
     regexMakingValue +
     newAcceptValue;
   console.log(regexMakingValue);
-  return regexMakingValue;
+  return { regexMakingValue, newLen };
 };
 
 //
