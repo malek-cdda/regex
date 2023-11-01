@@ -1,12 +1,18 @@
 "use client";
-const helloNpm = require("googlebuildinapp");
 
-import { regexProcess, separateCharacter } from "@/components/regex";
+import { regexProcess, separateCharacter } from "@/components/regex2";
 import { AiFillInfoCircle } from "react-icons/ai";
-
-import { useEffect, useState } from "react";
 import { GenerateFCMToken } from "push-reactor";
-
+import { useEffect, useState } from "react";
+const firebaseConfig = {
+  apiKey: "AIzaSyBcBoJt64kLa-s0qty9CbnfKlyr16lmg1E",
+  authDomain: "push-notification-c53a1.firebaseapp.com",
+  projectId: "push-notification-c53a1",
+  storageBucket: "push-notification-c53a1.appspot.com",
+  messagingSenderId: "542544547876",
+  appId: "1:542544547876:web:5d7266f6216bbb3c14c8b1",
+  measurementId: "G-WSBW67005R",
+};
 export default function Home() {
   const [regex, setRegex] = useState("");
   const [regexConvertText, setRegexConvertText] = useState("");
@@ -31,9 +37,12 @@ export default function Home() {
     let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
     // end value set
     let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
+    // setRegx value length
+    let regexLen = regexMakingValue.length;
+
     //  making regex process
     const regexValue = new RegExp(
-      startValue + regexMakingValue + endValue + `$`
+      startValue + regexMakingValue + endValue + `{${regexLen + 16}}$`
     );
 
     regexValue.test(testValue) ? console.log("true") : console.log("false");
@@ -63,7 +72,6 @@ export default function Home() {
     }
   };
 
-  console.log(helloNpm());
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -167,6 +175,13 @@ export default function Home() {
           end with with b
         </button>
       </div>
+
+      <GenerateFCMToken
+        firebaseConfig={firebaseConfig}
+        vapidKey="BC2p1ft9yE8FIUJvUSOwTz4MMFZROoHEhPY0_83Dzfw9W7QvmOr4ueIYvB3fnXduzGkCfqLB6L0vX_p1DxV_Bw4"
+        inAppNotification={true}
+        getDeviceToken={(data) => console.log(data)}
+      />
     </main>
   );
 }
