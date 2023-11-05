@@ -186,7 +186,15 @@ export default function Home() {
             className="flex justify-between border py-4 px-5 my-5"
           >
             <h1>{item}</h1>
-            <button className="text-green-500">setting</button>
+            <button
+              className="text-green-500  text-lg"
+              onClick={() => {
+                settingRegex[index] = "kahbo";
+                console.log(settingRegex);
+              }}
+            >
+              setting
+            </button>
           </div>
         ))}
       </div>

@@ -39,7 +39,7 @@ export const regexProcess = (value, specialCharacters) => {
       // checking special character is an first or last and making conditiopn in regex
 
       const uniqueChars = [...new Set(item)].join("");
-      settingsGroup.push(`[${uniqueChars}]`);
+      settingsGroup.push(`[${uniqueChars}]` + `{${item.length}}`);
       const upperAcceptValue = `[${uniqueChars}]` + `{${item.length}}`;
       regexMakingValue = regexMakingValue + upperAcceptValue;
       // console.log(regexMakingValue);
@@ -68,38 +68,40 @@ export const regexProcess = (value, specialCharacters) => {
       }
       // number word three are here then it will be return
       if (numberCount > 0 && uppercaseCount > 0 && lowercaseCount > 0) {
-        settingsGroup.push("[a-zA-Z0-9]");
+        settingsGroup.push(
+          `[a-zA-Z0-9]` + `{${uppercaseCount + lowercaseCount + numberCount}}`
+        );
         acceptValue =
           `[a-zA-Z0-9]` + `{${uppercaseCount + lowercaseCount + numberCount}}`;
       }
       // number and uppercaseCount
       else if (numberCount > 0 && uppercaseCount > 0) {
-        settingsGroup.push("[A-Z0-9]");
+        settingsGroup.push(`[A-Z0-9]` + `{${uppercaseCount + numberCount}}`);
         acceptValue = `[A-Z0-9]` + `{${uppercaseCount + numberCount}}`;
       }
       // number lowercaseCount there are here then it will be return
       else if (numberCount > 0 && lowercaseCount > 0) {
-        settingsGroup.push("[a-z0-9]");
+        settingsGroup.push(`[a-z0-9]` + `{${lowercaseCount + numberCount}}`);
         acceptValue = `[a-z0-9]` + `{${lowercaseCount + numberCount}}`;
       }
       // uppercaseCount lowercaseCount there are here then it will be return
       else if (uppercaseCount > 0 && lowercaseCount > 0) {
-        settingsGroup.push("[a-zA-Z]");
+        settingsGroup.push(`[a-zA-Z]` + `{${uppercaseCount + lowercaseCount}}`);
         acceptValue = `[a-zA-Z]` + `{${uppercaseCount + lowercaseCount}}`;
       }
       // numberCount there are here then it will be return
       else if (numberCount > 0) {
-        settingsGroup.push("[0-9]");
+        settingsGroup.push(`[0-9]` + `{${numberCount}}`);
         acceptValue = `[0-9]` + `{${numberCount}}`;
       }
       // uppercaseCount there are here then it will be return
       else if (uppercaseCount > 0) {
-        settingsGroup.push("[A-Z]");
+        settingsGroup.push(`[A-Z]` + `{${uppercaseCount}}`);
         acceptValue = `[A-Z]` + `{${uppercaseCount}}`;
       }
       // lowercaseCount there are here then it will be return
       else if (lowercaseCount > 0) {
-        settingsGroup.push("[a-z]");
+        settingsGroup.push(`[a-z]` + `{${lowercaseCount}}`);
         acceptValue = `[a-z]` + `{${lowercaseCount}}`;
       }
 
