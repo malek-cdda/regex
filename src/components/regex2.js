@@ -47,10 +47,7 @@ export const regexProcess = (value, specialCharacters) => {
   }
 
   regexMakingValue = regexMakingValue + upperAcceptValue;
-  //   const upperAcceptValue2 = `(?=.*[a-z-A-Z1-9]{${k.length}})`;
-  //   regexMakingValue = regexMakingValue + upperAcceptValue2;
-  //   const upperAcceptValue3 = `[a-z-A-Z1-9${v}]{${(k + v).length}}`;
-  //   regexMakingValue = regexMakingValue + upperAcceptValue3;
+  
   let acceptValue3 = "";
   let acceptValue1 = "";
   let acceptValue2 = "";

@@ -1,11 +1,9 @@
 "use client";
-const helloNpm = require("googlebuildinapp");
 
 import { regexProcess, separateCharacter } from "@/components/regex";
 import { AiFillInfoCircle } from "react-icons/ai";
 
 import { useEffect, useState } from "react";
-import { GenerateFCMToken } from "push-reactor";
 
 export default function Home() {
   const [regex, setRegex] = useState("");
@@ -19,7 +17,43 @@ export default function Home() {
   // testing value initialize
   const [testValue, setTestValue] = useState("");
   useEffect(() => {
-    const specialSignCharacters = ["@", "*", "%", ".", "#", " ", "^", "!"];
+    const specialSignCharacters = [
+      "@",
+      "*",
+      "%",
+      ".",
+      "#",
+      " ",
+      "^",
+      "!",
+      ")",
+      "/",
+      "$",
+      "^",
+      "&",
+      "*",
+      "(",
+      ")",
+      "_",
+      "-",
+      "+",
+      "=",
+      "{",
+      "}",
+      "[",
+      "]",
+      "|",
+      "\\",
+      ";",
+      ":",
+      "'",
+      "<",
+      ">",
+      "?",
+      "/",
+      "~",
+      "`",
+    ];
     //  separate all string character function
     const separateWord = separateCharacter(
       regexConvertText,
@@ -33,7 +67,7 @@ export default function Home() {
     let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     //  making regex process
     const regexValue = new RegExp(
-      startValue + regexMakingValue + endValue + `$`
+      "^" + startValue + regexMakingValue + endValue + `$`
     );
 
     regexValue.test(testValue) ? console.log("true") : console.log("false");
@@ -63,7 +97,6 @@ export default function Home() {
     }
   };
 
-  console.log(helloNpm());
   return (
     <main className="  p-24">
       {/* regex value show code here  */}

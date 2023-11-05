@@ -37,10 +37,13 @@ export const regexProcess = (value, specialCharacters) => {
     // checkinG character is an special or not
     if ([...item].some((char) => specialCharacters.includes(char))) {
       // checking special character is an first or last and making conditiopn in regex
-      const upperAcceptValue = `[${item}]` + `{${item.length}}`;
-      regexMakingValue = regexMakingValue + upperAcceptValue;
-    }
 
+      const uniqueChars = [...new Set(item)].join("");
+
+      const upperAcceptValue = `[${uniqueChars}]` + `{${item.length}}`;
+      regexMakingValue = regexMakingValue + upperAcceptValue;
+      // console.log(regexMakingValue);
+    }
     // checking word of character
     else {
       let acceptValue = "";
