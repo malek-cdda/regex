@@ -16,6 +16,7 @@ export default function Home() {
   const [startEndValue, setStartEndValue] = useState({});
   // testing value initialize
   const [testValue, setTestValue] = useState("");
+  const [settingRegex, setSettingRegex] = useState([]);
   useEffect(() => {
     const specialSignCharacters = [
       "@",
@@ -60,7 +61,10 @@ export default function Home() {
       specialSignCharacters
     );
     //  string convert process in convert normal string to regex process function
-    const regexMakingValue = regexProcess(separateWord, specialSignCharacters);
+    const { regexMakingValue, settingsGroup } = regexProcess(
+      separateWord,
+      specialSignCharacters
+    );
     //  start value set
     let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
     // end value set
@@ -69,7 +73,7 @@ export default function Home() {
     const regexValue = new RegExp(
       "^" + startValue + regexMakingValue + endValue + `$`
     );
-
+    setSettingRegex(settingsGroup);
     regexValue.test(testValue) ? console.log("true") : console.log("false");
     setRegex(regexValue);
   }, [regexConvertText, startEndValue, testValue]);
@@ -175,8 +179,20 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div>
+        {settingRegex.map((item, index) => (
+          <div
+            key={index}
+            className="flex justify-between border py-4 px-5 my-5"
+          >
+            <h1>{item}</h1>
+            <button className="text-green-500">setting</button>
+          </div>
+        ))}
+      </div>
+
       {/* start and end value given here  */}
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <button
           className="border text-green-600 bg-gray-50 px-5 py-2 "
           onClick={(e) => {
@@ -199,7 +215,7 @@ export default function Home() {
         >
           end with with b
         </button>
-      </div>
+      </div> */}
     </main>
   );
 }
