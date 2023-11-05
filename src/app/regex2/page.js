@@ -2,17 +2,9 @@
 
 import { regexProcess, separateCharacter } from "@/components/regex2";
 import { AiFillInfoCircle } from "react-icons/ai";
-import { GenerateFCMToken } from "push-reactor";
+
 import { useEffect, useState } from "react";
-const firebaseConfig = {
-  apiKey: "AIzaSyBcBoJt64kLa-s0qty9CbnfKlyr16lmg1E",
-  authDomain: "push-notification-c53a1.firebaseapp.com",
-  projectId: "push-notification-c53a1",
-  storageBucket: "push-notification-c53a1.appspot.com",
-  messagingSenderId: "542544547876",
-  appId: "1:542544547876:web:5d7266f6216bbb3c14c8b1",
-  measurementId: "G-WSBW67005R",
-};
+
 export default function Home() {
   const [regex, setRegex] = useState("");
   const [regexConvertText, setRegexConvertText] = useState("");
@@ -21,7 +13,7 @@ export default function Home() {
   // inital update regex string
   const [content, setContent] = useState("");
   // start and end value initial state here
-  const [startEndValue, setStartEndValue] = useState({});
+  // const [startEndValue, setStartEndValue] = useState({});
   // testing value initialize
   const [testValue, setTestValue] = useState("");
   useEffect(() => {
@@ -37,19 +29,19 @@ export default function Home() {
       specialSignCharacters
     );
     //  start value set
-    let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
-    // end value set
-    let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
+    // let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
+    // // end value set
+    // let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     // setRegx value length
-
+    console.log(regexMakingValue);
     //  making regex process
-    const regexValue = new RegExp(
-      startValue + regexMakingValue + endValue + `{${newLen}}$`
-    );
-
-    regexValue.test(testValue) ? console.log("true") : console.log("false");
-    setRegex(regexValue);
-  }, [regexConvertText, startEndValue, testValue]);
+    if (regexMakingValue) {
+      const regexValue = new RegExp("^" + regexMakingValue + `{${newLen}}$`);
+      console.log(testValue, regexValue);
+      regexValue.test(testValue) ? console.log("true") : console.log("false");
+      setRegex(regexValue);
+    }
+  }, [regexConvertText, testValue]);
   // convert regex to string
 
   // Initial  update regx value get
@@ -73,6 +65,8 @@ export default function Home() {
       checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
     }
   };
+  console.log(regex);
+  //   regex.test(testValue) ? console.log("true") : console.log("false");
 
   return (
     <main className="  p-24">
@@ -153,7 +147,7 @@ export default function Home() {
         </div>
       </div>
       {/* start and end value given here  */}
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <button
           className="border text-green-600 bg-gray-50 px-5 py-2 "
           onClick={(e) => {
@@ -164,8 +158,8 @@ export default function Home() {
           }}
         >
           start with f
-        </button>
-        <button
+        </button> */}
+      {/* <button
           className="border text-green-600 bg-gray-50 px-5 py-2 "
           onClick={(e) => {
             setStartEndValue({
@@ -175,8 +169,8 @@ export default function Home() {
           }}
         >
           end with with b
-        </button>
-      </div>
+        </button> */}
+      {/* </div> */}
     </main>
   );
 }

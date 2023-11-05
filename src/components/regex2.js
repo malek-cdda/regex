@@ -2,7 +2,7 @@ export const separateCharacter = (value, specialSignCharacters) => {
   const sumOfString = [];
   const letterValue = [];
   const specialSign = [];
-  let numberValue = [];
+
   // seperate string character
   for (let i = 0; i < value.length; i++) {
     // seperate special character
@@ -32,18 +32,18 @@ export const separateCharacter = (value, specialSignCharacters) => {
 // decLAre for  normal text to convert regex
 export const regexProcess = (value, specialCharacters) => {
   let regexMakingValue = "";
-  let v = "";
-  let k = "";
+  let specialCharacterSign = "";
+  let letterValue = "";
   value.forEach((item) => {
     if (specialCharacters.includes(item[0])) {
-      v = v + item;
+      specialCharacterSign = specialCharacterSign + item;
     } else {
-      k = k + item;
+      letterValue = letterValue + item;
     }
   });
-  let upperAcceptValue = "[]";
-  if (v.length > 0) {
-    upperAcceptValue = `(?=.*[${v}]{${v.length}})`;
+  let upperAcceptValue = "";
+  if (specialCharacterSign.length > 0) {
+    upperAcceptValue = `(?=.*[${specialCharacterSign}]{${specialCharacterSign.length}})`;
   }
 
   regexMakingValue = regexMakingValue + upperAcceptValue;
@@ -57,8 +57,7 @@ export const regexProcess = (value, specialCharacters) => {
   let uppercaseCount = 0;
   let lowercaseCount = 0;
   let numberCount = 0;
-  [...k].forEach((item) => {
-    let c = 0;
+  [...letterValue].forEach((item) => {
     const char = item.charAt(item);
     // find uppercase value count
     if (/[A-Z]/.test(char)) {
@@ -74,60 +73,56 @@ export const regexProcess = (value, specialCharacters) => {
       acceptValue1 = `(?=.*[0-9]{${numberCount}})`;
     }
     // uppercaseCount there are here then it will be return
-    else if (uppercaseCount > 0) {
+    if (uppercaseCount > 0) {
       acceptValue2 = `(?=.*[A-Z]{${uppercaseCount}})`;
     }
     // lowercaseCount there are here then it will be return
-    else if (lowercaseCount > 0) {
+    if (lowercaseCount > 0) {
       acceptValue3 = `(?=.*[a-z]{${lowercaseCount}})`;
     }
 
     // merge al value
   });
   let newAcceptValue = "";
-  if (numberCount > 0 && uppercaseCount > 0 && lowercaseCount > 0 && v) {
-    newAcceptValue = `[a-zA-Z0-9${v}]`;
+  // uppercaseCount numberCount lowercaseCount match then it will be return
+  if (uppercaseCount > 0 && lowercaseCount && numberCount > 0) {
+    newAcceptValue = `[a-zA-Z1-9${specialCharacterSign}]`;
   }
-  // number and uppercaseCount
-  else if (numberCount > 0 && uppercaseCount > 0 && v) {
-    newAcceptValue = `[A-Z0-9${v}]`;
+  // uppercaseCount lowercaseCount match then it will be return
+  else if (uppercaseCount > 0 && lowercaseCount) {
+    newAcceptValue = `[a-zA-Z${specialCharacterSign}]`;
   }
-  // number lowercaseCount there are here then it will be return
-  else if (numberCount > 0 && lowercaseCount > 0 && v) {
-    newAcceptValue = `[a-z0-9${v}]`;
+  // uppercaseCount numberCount match then it will be return
+  else if (uppercaseCount > 0 && numberCount) {
+    newAcceptValue = `[A-Z1-9${specialCharacterSign}]`;
   }
-  // uppercaseCount lowercaseCount there are here then it will be return
-  else if (uppercaseCount > 0 && lowercaseCount > 0 && v) {
-    newAcceptValue = `[a-zA-Z${v}]`;
-  } else if (numberCount > 0 && v) {
-    newAcceptValue = `[1-9${v}]`;
-  }
-  // uppercaseCount there are here then it will be return
-  else if (uppercaseCount > 0 && v) {
-    newAcceptValue = `[A-Z${v}]`;
+  // lowercaseCount numberCount match then it will be return
+  else if (lowercaseCount > 0 && numberCount) {
+    newAcceptValue = `[a-z1-9${specialCharacterSign}]`;
   }
   // lowercaseCount there are here then it will be return
   else if (lowercaseCount > 0) {
-    newAcceptValue = `[a-z${v}]`;
-  } else if (numberCount > 0) {
-    newAcceptValue = `[1-9]`;
+    newAcceptValue = `[a-z${specialCharacterSign}]`;
+  }
+  // numberCount there are here then it will be return
+  else if (numberCount > 0) {
+    newAcceptValue = `[1-9${specialCharacterSign}]`;
   }
   // uppercaseCount there are here then it will be return
   else if (uppercaseCount > 0) {
-    newAcceptValue = `[A-Z]`;
+    newAcceptValue = `[A-Z${specialCharacterSign}]`;
   }
   // lowercaseCount there are here then it will be return
   else if (lowercaseCount > 0) {
-    newAcceptValue = `[a-z]`;
+    newAcceptValue = `[a-z${specialCharacterSign}]`;
   }
-  //   let newLen = 0;
-  //   if (k && v) {
-  //     newLen = k.length + v.length;
-  //   }
-  let newLen = lowercaseCount + uppercaseCount + numberCount + v.length;
-  //   if (v.length > 0) {
-  //     newLen = v.length + k.length;
-  //   }
+  // specialCharacterSign there are here then it will be return
+  else if (specialCharacterSign) {
+    newAcceptValue = `[${specialCharacterSign}]`;
+  }
+
+  let newLen =
+    lowercaseCount + uppercaseCount + numberCount + specialCharacterSign.length;
 
   regexMakingValue =
     acceptValue1 +
