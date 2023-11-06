@@ -6,7 +6,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [regex, setRegex] = useState("");
+  let [regex, setRegex] = useState("");
   const [regexConvertText, setRegexConvertText] = useState("");
   const [checkValue, setCheckValue] = useState(null);
 
@@ -17,6 +17,7 @@ export default function Home() {
   // testing value initialize
   const [testValue, setTestValue] = useState("");
   const [settingRegex, setSettingRegex] = useState([]);
+  const [updateRegex, setUpdateRegex] = useState("");
   useEffect(() => {
     const specialSignCharacters = [
       "@",
@@ -56,10 +57,15 @@ export default function Home() {
       "`",
     ];
     //  separate all string character function
-    const separateWord = separateCharacter(
-      regexConvertText,
-      specialSignCharacters
-    );
+    let separateWord;
+    console.log(regexConvertText);
+    if (!regexConvertText) {
+      console.log("my target is empty value");
+      separateWord = separateCharacter(regexConvertText, specialSignCharacters);
+    } else {
+      separateWord = separateCharacter(regexConvertText, specialSignCharacters);
+    }
+    console.log(separateWord);
     //  string convert process in convert normal string to regex process function
     const { regexMakingValue, settingsGroup } = regexProcess(
       separateWord,
@@ -70,9 +76,13 @@ export default function Home() {
     // end value set
     let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     //  making regex process
-    const regexValue = new RegExp(
+    let regexValue;
+
+    regexValue = new RegExp(
       "^" + startValue + regexMakingValue + endValue + `$`
     );
+    console.log(regexMakingValue);
+
     setSettingRegex(settingsGroup);
     regexValue.test(testValue) ? console.log("true") : console.log("false");
     setRegex(regexValue);
@@ -100,7 +110,7 @@ export default function Home() {
       checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
     }
   };
-
+  console.log(updateRegex);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -189,8 +199,11 @@ export default function Home() {
             <button
               className="text-green-500  text-lg"
               onClick={() => {
-                settingRegex[index] = "kahbo";
-                console.log(settingRegex);
+                settingRegex[index] = `[0-${index + 1}]{${index + 1}}}`;
+                setSettingRegex([...settingRegex]);
+                setUpdateRegex(settingRegex.join(""));
+                // setRegexConvertText("");
+                // console.log(settingRegex.join(""));
               }}
             >
               setting
@@ -198,7 +211,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-
       {/* start and end value given here  */}
       {/* <div className="flex justify-between">
         <button

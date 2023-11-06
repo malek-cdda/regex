@@ -24,7 +24,13 @@ export const separateCharacter = (value, specialSignCharacters) => {
     sumOfString.push(letterValue.join(""));
   }
   //   avoid empty string
-  const joinString = sumOfString.filter((item) => item !== "");
+  let joinString;
+  console.log(value);
+  if (!value) {
+    joinString = [];
+  } else {
+    joinString = sumOfString.filter((item) => item !== "");
+  }
   return joinString;
 };
 
