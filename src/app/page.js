@@ -1,9 +1,10 @@
 "use client";
 
-import { regexProcess, separateCharacter } from "@/components/regex";
 import { AiFillInfoCircle } from "react-icons/ai";
 
 import { useEffect, useState } from "react";
+import { separateCharacter } from "@/components/regex/specianCharacter";
+import { regexProcess } from "@/components/regex/regexProcess";
 
 export default function Home() {
   let [regex, setRegex] = useState("");
@@ -58,7 +59,7 @@ export default function Home() {
     ];
     //  separate all string character function
     let separateWord;
-    console.log(regexConvertText);
+
     if (!regexConvertText) {
       console.log("my target is empty value");
       separateWord = separateCharacter(regexConvertText, specialSignCharacters);
@@ -76,16 +77,16 @@ export default function Home() {
     // end value set
     let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     //  making regex process
-    let regexValue;
+    // let regexValue;
 
-    regexValue = new RegExp(
+    const regexValue = new RegExp(
       "^" + startValue + regexMakingValue + endValue + `$`
     );
     console.log(regexMakingValue);
 
     setSettingRegex(settingsGroup);
     regexValue.test(testValue) ? console.log("true") : console.log("false");
-    setRegex(regexValue);
+    setRegex((prev) => regexValue);
   }, [regexConvertText, startEndValue, testValue]);
   // convert regex to string
 
@@ -202,8 +203,6 @@ export default function Home() {
                 settingRegex[index] = `[0-${index + 1}]{${index + 1}}}`;
                 setSettingRegex([...settingRegex]);
                 setUpdateRegex(settingRegex.join(""));
-                // setRegexConvertText("");
-                // console.log(settingRegex.join(""));
               }}
             >
               setting
