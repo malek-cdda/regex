@@ -2,7 +2,7 @@ export const separateCharacter = (value, specialSignCharacters) => {
   const sumOfString = [];
   const letterValue = [];
   const specialSign = [];
-  let numberValue = [];
+
   // seperate string character
   for (let i = 0; i < value.length; i++) {
     // seperate special character
@@ -24,12 +24,7 @@ export const separateCharacter = (value, specialSignCharacters) => {
     sumOfString.push(letterValue.join(""));
   }
   //   avoid empty string
-  let joinString;
-  console.log(value);
-  if (!value) {
-    joinString = [];
-  } else {
-    joinString = sumOfString.filter((item) => item !== "");
-  }
+  const joinString = sumOfString.filter((item) => item !== "");
+
   return joinString;
 };

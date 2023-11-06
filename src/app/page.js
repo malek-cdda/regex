@@ -58,15 +58,12 @@ export default function Home() {
       "`",
     ];
     //  separate all string character function
-    let separateWord;
 
-    if (!regexConvertText) {
-      console.log("my target is empty value");
-      separateWord = separateCharacter(regexConvertText, specialSignCharacters);
-    } else {
-      separateWord = separateCharacter(regexConvertText, specialSignCharacters);
-    }
-    console.log(separateWord);
+    const separateWord = separateCharacter(
+      regexConvertText,
+      specialSignCharacters
+    );
+
     //  string convert process in convert normal string to regex process function
     const { regexMakingValue, settingsGroup } = regexProcess(
       separateWord,
@@ -82,11 +79,22 @@ export default function Home() {
     const regexValue = new RegExp(
       "^" + startValue + regexMakingValue + endValue + `$`
     );
-    console.log(regexMakingValue);
 
     setSettingRegex(settingsGroup);
-    regexValue.test(testValue) ? console.log("true") : console.log("false");
-    setRegex((prev) => regexValue);
+    // regexValue.test(testValue) ? setCheckValue(true) : setCheckValue(false);
+    // if (updateRegex) {
+    //   const checkUpdateRegex = new RegExp("^" + updateRegex + "$");
+    //   checkUpdateRegex.test(regexConvertText)
+    //     ? setCheckValue(true)
+    //     : setCheckValue(false);
+    //   setRegex(checkUpdateRegex);
+    // } else {
+    // regexValue.test(regexConvertText)
+    //   ? setCheckValue(true)
+    //   : setCheckValue(false);
+    setRegex(regexValue);
+    // }
+    // setRegex(regexValue);
   }, [regexConvertText, startEndValue, testValue]);
   // convert regex to string
 
@@ -98,20 +106,73 @@ export default function Home() {
     regexString = regexString + regexToString[i];
   }
   const handleContentChange = (event) => {
+    console.log(event.target.textContent);
     setContent(event.target.textContent);
-    checkingRegex(testValue, "updateText");
+    const checkUpdateRegex = new RegExp(event.target.textContent);
+    checkUpdateRegex.test(regexConvertText)
+      ? setCheckValue(true)
+      : setCheckValue(false);
+    // checkingRegex(testValue, "updateText");
   };
   // regex check if regex valid return true or false
   const checkingRegex = (value, type) => {
-    if (type == "normalText") {
-      regex.test(value) ? setCheckValue(true) : setCheckValue(false);
-    } else {
-      // create update regex value
-      const checkUpdateRegex = new RegExp(content);
-      checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
-    }
+    // if (type == "normalText") {
+    //   // console.log("my test value is back", value, regex.test(value), regex);
+    //   regex.test(value) ? setCheckValue(true) : setCheckValue(false);
+    // } else {
+    //   // create update regex value
+    //   const checkUpdateRegex = new RegExp(content);
+    //   checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
+    // }
   };
+  const [settingToggle, setSettingToggle] = useState(null);
   console.log(updateRegex);
+  useEffect(() => {
+    if (updateRegex) {
+      const checkUpdateRegex = new RegExp("^" + updateRegex + "$");
+      checkUpdateRegex.test(regexConvertText)
+        ? setCheckValue(true)
+        : setCheckValue(false);
+      setRegex(checkUpdateRegex);
+    }
+  }, [updateRegex, regexConvertText]);
+  const [customUpRegex, setCustomUpRegex] = useState(null | {});
+  const handleCustomUpdate = (item, index) => {
+    let rangeValue = "";
+    let avoidValue = "";
+    let endValue = "";
+    if (customUpRegex[index + 1]) {
+      if (customUpRegex[index] >= customUpRegex[index + 1]) {
+        alert(
+          "minimum value is not greater than maximum value or same is not grater than value"
+        );
+        return;
+      } else {
+        rangeValue = `{${customUpRegex[index]},${customUpRegex[index + 1]}}`;
+      }
+    } else {
+      if (window.confirm("are you sure you want to  infinite value accept")) {
+        rangeValue = `{${customUpRegex[index]},}`;
+      } else {
+        rangeValue = `{${customUpRegex[index]}}`;
+      }
+    }
+    if (customUpRegex[index + 2]) {
+      avoidValue = `[^${customUpRegex[index + 2]}]`;
+    }
+    if (customUpRegex[index + 3]) {
+      endValue = `[${customUpRegex[index + 3]}]`;
+    }
+    const splitItem = item.split("]")[0];
+    const splitItems = splitItem.split("[")[splitItem.split("[").length - 1];
+    // console.log(splitItem.split("[").length - 1);
+    settingRegex[
+      index
+    ] = `${avoidValue}[${splitItems}]${rangeValue}${endValue}}`;
+    setSettingRegex([...settingRegex]);
+    setUpdateRegex(settingRegex.join(""));
+    // setSettingToggle(index);
+  };
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -167,8 +228,37 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* for creating regex input some text  */}
       <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
+        <div>
+          <input
+            className="w-full focus:outline-none border-b-2 "
+            placeholder="specify string to match "
+            onChange={(e) => {
+              setTestValue(e.target.value);
+              setRegexConvertText(e.target.value);
+              // checkingRegex(e.target.value, "normalText");
+            }}
+          />
+          <span className="text-[8px] text-red-400  ">
+            {checkValue == false ? "match the requested form" : ""}
+          </span>
+          <h6 className="text-sm">
+            {checkValue == false ? "not matching" : ""}
+          </h6>
+        </div>
+        <div className="group   absolute  top-1 right-7">
+          <span className="cursor-pointer">
+            <AiFillInfoCircle />
+          </span>
+          <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
+            specified test value does not match the generated regular
+            expression, the description of the regular expression will be
+            displayed as a validation error directly below the te
+          </div>
+        </div>
+      </div>
+      {/* for creating regex input some text  */}
+      {/* <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
         <div>
           <input
             className="w-full focus:outline-none border-b-2 "
@@ -189,20 +279,76 @@ export default function Home() {
             displayed as a validation error directly below the te
           </div>
         </div>
-      </div>
-      <div>
+      </div> */}
+      <div className="  relative">
         {settingRegex.map((item, index) => (
           <div
             key={index}
-            className="flex justify-between border py-4 px-5 my-5"
+            className="flex justify-between border py-4 px-5 my-5   w-1/2 "
           >
             <h1>{item}</h1>
+            {index == settingToggle && (
+              <div className="absolute top-0 right-1 flex flex-col space-y-1 bg-white w-5/12 ">
+                <input
+                  placeholder="regex minimum value length"
+                  className="border py-4 px-3"
+                  type="number"
+                  min="1"
+                  minLength="1"
+                  onChange={(e) => {
+                    setCustomUpRegex({
+                      ...customUpRegex,
+                      [index]: e.target.value,
+                    });
+                  }}
+                />
+                <input
+                  placeholder="regex maximum value length"
+                  className="border py-4 px-3"
+                  min="1"
+                  minLength="1"
+                  type="number"
+                  onChange={(e) => {
+                    setCustomUpRegex({
+                      ...customUpRegex,
+                      [index + 1]: e.target.value,
+                    });
+                  }}
+                />
+
+                <input
+                  placeholder="enter avoid word"
+                  className="border py-4 px-3"
+                  onChange={(e) => {
+                    setCustomUpRegex({
+                      ...customUpRegex,
+                      [index + 2]: e.target.value,
+                    });
+                  }}
+                />
+                <input
+                  placeholder="enter your end value"
+                  className="border py-4 px-3"
+                  onChange={(e) => {
+                    setCustomUpRegex({
+                      ...customUpRegex,
+                      [index + 3]: e.target.value,
+                    });
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    handleCustomUpdate(item, index);
+                  }}
+                >
+                  submit
+                </button>
+              </div>
+            )}
             <button
               className="text-green-500  text-lg"
               onClick={() => {
-                settingRegex[index] = `[0-${index + 1}]{${index + 1}}}`;
-                setSettingRegex([...settingRegex]);
-                setUpdateRegex(settingRegex.join(""));
+                setSettingToggle(index);
               }}
             >
               setting
@@ -210,6 +356,7 @@ export default function Home() {
           </div>
         ))}
       </div>
+
       {/* start and end value given here  */}
       {/* <div className="flex justify-between">
         <button
