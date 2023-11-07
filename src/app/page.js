@@ -77,6 +77,8 @@ export default function Home() {
         avoidValue = `((?!.*[${customUpRegex[index + 2]}])${
           customUpRegex[index + 3]
         }${rangeValue})`;
+        settingRegex[index] = customUpRegex[index + 3];
+        setSettingRegex([...settingRegex]);
       } else {
         avoidValue = `((?!.*[${
           customUpRegex[index + 2]
@@ -85,6 +87,8 @@ export default function Home() {
     } else {
       if (customUpRegex[index + 3]) {
         avoidValue = `${customUpRegex[index + 3]}${rangeValue}`;
+        settingRegex[index] = customUpRegex[index + 3];
+        setSettingRegex([...settingRegex]);
       } else {
         avoidValue = `${item}${rangeValue}`;
       }
