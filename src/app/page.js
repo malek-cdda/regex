@@ -18,7 +18,7 @@ export default function Home() {
   // testing value initialize
   const [testValue, setTestValue] = useState("");
   const [settingRegex, setSettingRegex] = useState([]);
-  const [updateRegex, setUpdateRegex] = useState("");
+  const [updateRegex, setUpdateRegex] = useState([]);
   useEffect(() => {
     const specialSignCharacters = [
       "@",
@@ -95,7 +95,8 @@ export default function Home() {
     setRegex(regexValue);
     // }
     // setRegex(regexValue);
-  }, [regexConvertText, startEndValue, testValue]);
+    console.log(updateRegex);
+  }, [regexConvertText, startEndValue, updateRegex]);
   // convert regex to string
 
   // Initial  update regx value get
@@ -126,21 +127,20 @@ export default function Home() {
     // }
   };
   const [settingToggle, setSettingToggle] = useState(null);
-  console.log(updateRegex);
+
   useEffect(() => {
-    if (updateRegex) {
-      const checkUpdateRegex = new RegExp("^" + updateRegex + "$");
-      checkUpdateRegex.test(regexConvertText)
-        ? setCheckValue(true)
-        : setCheckValue(false);
-      setRegex(checkUpdateRegex);
-    }
-  }, [updateRegex, regexConvertText]);
+    const checkUpdateRegex = new RegExp("^" + updateRegex.join("") + "$");
+    // checkUpdateRegex.test(regexConvertText)
+    //   ? setCheckValue(true)
+    //   : setCheckValue(false);
+    setRegex(checkUpdateRegex);
+  }, [updateRegex]);
   const [customUpRegex, setCustomUpRegex] = useState(null | {});
+
   const handleCustomUpdate = (item, index) => {
     let rangeValue = "";
     let avoidValue = "";
-    let endValue = "";
+
     if (customUpRegex[index + 1]) {
       if (customUpRegex[index] >= customUpRegex[index + 1]) {
         alert(
@@ -152,27 +152,41 @@ export default function Home() {
       }
     } else {
       if (window.confirm("are you sure you want to  infinite value accept")) {
-        rangeValue = `{${customUpRegex[index]},}`;
+        if (!customUpRegex[index]) {
+          rangeValue = `{1,}`;
+          return;
+        } else {
+          rangeValue = `{${customUpRegex[index]},}`;
+        }
       } else {
-        rangeValue = `{${customUpRegex[index]}}`;
+        rangeValue = `{1,}`;
       }
     }
     if (customUpRegex[index + 2]) {
-      avoidValue = `[^${customUpRegex[index + 2]}]`;
+      avoidValue = `((?!.*[${customUpRegex[index + 2]}])${item}${rangeValue})`;
+    } else {
+      avoidValue = item;
     }
-    if (customUpRegex[index + 3]) {
-      endValue = `[${customUpRegex[index + 3]}]`;
+    if (!updateRegex.length) {
+      const mapData = settingRegex.map((item, i) => {
+        if (i == index) {
+          console.log(avoidValue);
+          return avoidValue;
+        } else {
+          return item;
+        }
+      });
+      // regexs = new RegExp("^" + mapData.join("") + "$");
+      setUpdateRegex(mapData);
+    } else {
+      updateRegex[index] = avoidValue;
+      setUpdateRegex(updateRegex);
+      setRegex(updateRegex.join(""));
+      // console.log(updateRegex.join(""));
+      // regexs = new RegExp("^" + updateRegex.join("") + "$");
     }
-    const splitItem = item.split("]")[0];
-    const splitItems = splitItem.split("[")[splitItem.split("[").length - 1];
-    // console.log(splitItem.split("[").length - 1);
-    settingRegex[
-      index
-    ] = `${avoidValue}[${splitItems}]${rangeValue}${endValue}}`;
-    setSettingRegex([...settingRegex]);
-    setUpdateRegex(settingRegex.join(""));
-    // setSettingToggle(index);
   };
+  console.log(updateRegex);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -323,16 +337,6 @@ export default function Home() {
                     setCustomUpRegex({
                       ...customUpRegex,
                       [index + 2]: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  placeholder="enter your end value"
-                  className="border py-4 px-3"
-                  onChange={(e) => {
-                    setCustomUpRegex({
-                      ...customUpRegex,
-                      [index + 3]: e.target.value,
                     });
                   }}
                 />

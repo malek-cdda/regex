@@ -1,3 +1,7 @@
+# introduction
+
+this is regex generate system.a non tech person can be use this generator. i search more of website there ar no update system but generator have to update system,
+
 # regex creating system
 
 # how to work this system
