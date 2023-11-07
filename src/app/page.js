@@ -5,7 +5,10 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { separateCharacter } from "@/components/regex/separateCharacter";
 import { regexProcess } from "@/components/regex/regexProcess";
-import { specialSignCharacters } from "@/components/regex/regexData";
+import {
+  specialSignCharacters,
+  userFavourStructureValue,
+} from "@/components/regex/regexData";
 
 export default function Home() {
   let [regex, setRegex] = useState("");
@@ -47,7 +50,7 @@ export default function Home() {
   const handleCustomUpdate = (item, index) => {
     let rangeValue = "";
     let avoidValue = "";
-
+    console.log(customUpRegex);
     if (customUpRegex[index + 1]) {
       if (customUpRegex[index] >= customUpRegex[index + 1]) {
         alert(
@@ -70,13 +73,25 @@ export default function Home() {
       }
     }
     if (customUpRegex[index + 2]) {
-      avoidValue = `((?!.*[${customUpRegex[index + 2]}])${item}${rangeValue})`;
+      if (customUpRegex[index + 3]) {
+        avoidValue = `((?!.*[${customUpRegex[index + 2]}])${
+          customUpRegex[index + 3]
+        }${rangeValue})`;
+      } else {
+        avoidValue = `((?!.*[${
+          customUpRegex[index + 2]
+        }])${item}${rangeValue})`;
+      }
     } else {
-      avoidValue = item;
+      if (customUpRegex[index + 3]) {
+        avoidValue = `${customUpRegex[index + 3]}${rangeValue}`;
+      } else {
+        avoidValue = `${item}${rangeValue}`;
+      }
     }
     if (!updateRegex.length) {
-      const regexUpdateData = settingRegex.map((item, i) => {
-        if (i == index) {
+      const regexUpdateData = settingRegex.map((item, idx) => {
+        if (idx == index) {
           return avoidValue;
         } else {
           return item;
@@ -143,6 +158,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* making regex value for imput  */}
       <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
         <div>
           <input
@@ -173,29 +189,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* for creating regex input some text  */}
-      {/* <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
-        <div>
-          <input
-            className="w-full focus:outline-none border-b-2 "
-            placeholder="specify string to match "
-            onChange={(e) => {
-              setTestValue(e.target.value);
-              setRegexConvertText(e.target.value);
-            }}
-          />
-        </div>
-        <div className="group   absolute  top-1 right-7">
-          <span className="cursor-pointer">
-            <AiFillInfoCircle />
-          </span>
-          <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
-            specified test value does not match the generated regular
-            expression, the description of the regular expression will be
-            displayed as a validation error directly below the te
-          </div>
-        </div>
-      </div> */}
+      {/* update regex value  */}
+
       <div className="  relative">
         {settingRegex.map((item, index) => (
           <div
@@ -242,6 +237,25 @@ export default function Home() {
                     });
                   }}
                 />
+
+                {
+                  <select
+                    className="border py-4 px-3"
+                    onChange={(e) => {
+                      setCustomUpRegex({
+                        ...customUpRegex,
+                        [index + 3]: e.target.value,
+                      });
+                    }}
+                  >
+                    {userFavourStructureValue.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                }
+
                 <button
                   onClick={() => {
                     handleCustomUpdate(item, index);

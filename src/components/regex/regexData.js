@@ -35,3 +35,20 @@ export const specialSignCharacters = [
   "~",
   "`",
 ];
+export const userFavourStructureValue = [
+  "",
+  "[a-z]",
+  "[A-Z]",
+  "[1-9]",
+  "[a-z0-9]",
+  "[A-Z0-9]",
+  "[0-9a-z]",
+  "[a-zA-Z]",
+  "[A-Za-z]",
+  "[a-zA-Z0-9]",
+  "[a-z0-9A-Z]",
+  "[0-9a-zA-Z]",
+  "[0-9A-Za-z]",
+  "[A-Za-z0-9]",
+  "[A-Z0-9a-z]",
+];
