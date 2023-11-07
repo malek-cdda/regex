@@ -22,7 +22,7 @@ export default function Home() {
   const [updateRegex, setUpdateRegex] = useState([]);
   const [settingToggle, setSettingToggle] = useState(null);
   const [customUpRegex, setCustomUpRegex] = useState(null | {});
-
+  const [arr, setArr] = useState([]);
   useEffect(() => {
     //  separate all string character function
     const separateWord = separateCharacter(
@@ -30,10 +30,11 @@ export default function Home() {
       specialSignCharacters
     );
     //  string convert process in convert normal string to regex process function
-    const { regexMakingValue, settingsGroup } = regexProcess(
+    const { regexMakingValue, settingsGroup, arr } = regexProcess(
       separateWord,
       specialSignCharacters
     );
+    setArr(arr);
     const regexValue = new RegExp("^" + regexMakingValue + `$`);
     setRegex(regexValue);
     //  separeate regex group
@@ -77,8 +78,8 @@ export default function Home() {
         avoidValue = `((?!.*[${customUpRegex[index + 2]}])${
           customUpRegex[index + 3]
         }${rangeValue})`;
-        settingRegex[index] = customUpRegex[index + 3];
-        setSettingRegex([...settingRegex]);
+        // settingRegex[index] = customUpRegex[index + 3];
+        // setSettingRegex([...settingRegex]);
       } else {
         avoidValue = `((?!.*[${
           customUpRegex[index + 2]
@@ -87,8 +88,8 @@ export default function Home() {
     } else {
       if (customUpRegex[index + 3]) {
         avoidValue = `${customUpRegex[index + 3]}${rangeValue}`;
-        settingRegex[index] = customUpRegex[index + 3];
-        setSettingRegex([...settingRegex]);
+        // settingRegex[index] = customUpRegex[index + 3];
+        // setSettingRegex([...settingRegex]);
       } else {
         avoidValue = `${item}${rangeValue}`;
       }
@@ -109,6 +110,7 @@ export default function Home() {
       const checkUpdateRegex = new RegExp("^" + updateRegex.join("") + "$");
       setRegex(checkUpdateRegex);
     }
+    setCustomUpRegex({});
   };
 
   return (
