@@ -3,139 +3,46 @@
 import { AiFillInfoCircle } from "react-icons/ai";
 
 import { useEffect, useState } from "react";
-import { separateCharacter } from "@/components/regex/specianCharacter";
+import { separateCharacter } from "@/components/regex/separateCharacter";
 import { regexProcess } from "@/components/regex/regexProcess";
+import { specialSignCharacters } from "@/components/regex/regexData";
 
 export default function Home() {
   let [regex, setRegex] = useState("");
   const [regexConvertText, setRegexConvertText] = useState("");
   const [checkValue, setCheckValue] = useState(null);
-
   // inital update regex string
   const [content, setContent] = useState("");
-  // start and end value initial state here
-  const [startEndValue, setStartEndValue] = useState({});
   // testing value initialize
   const [testValue, setTestValue] = useState("");
   const [settingRegex, setSettingRegex] = useState([]);
   const [updateRegex, setUpdateRegex] = useState([]);
-  useEffect(() => {
-    const specialSignCharacters = [
-      "@",
-      "*",
-      "%",
-      ".",
-      "#",
-      " ",
-      "^",
-      "!",
-      ")",
-      "/",
-      "$",
-      "^",
-      "&",
-      "*",
-      "(",
-      ")",
-      "_",
-      "-",
-      "+",
-      "=",
-      "{",
-      "}",
-      "[",
-      "]",
-      "|",
-      "\\",
-      ";",
-      ":",
-      "'",
-      "<",
-      ">",
-      "?",
-      "/",
-      "~",
-      "`",
-    ];
-    //  separate all string character function
+  const [settingToggle, setSettingToggle] = useState(null);
+  const [customUpRegex, setCustomUpRegex] = useState(null | {});
 
+  useEffect(() => {
+    //  separate all string character function
     const separateWord = separateCharacter(
       regexConvertText,
       specialSignCharacters
     );
-
     //  string convert process in convert normal string to regex process function
     const { regexMakingValue, settingsGroup } = regexProcess(
       separateWord,
       specialSignCharacters
     );
-    //  start value set
-    let startValue = startEndValue.start ? `[${startEndValue?.start}]` : "";
-    // end value set
-    let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
-    //  making regex process
-    // let regexValue;
-
-    const regexValue = new RegExp(
-      "^" + startValue + regexMakingValue + endValue + `$`
-    );
-
-    setSettingRegex(settingsGroup);
-    // regexValue.test(testValue) ? setCheckValue(true) : setCheckValue(false);
-    // if (updateRegex) {
-    //   const checkUpdateRegex = new RegExp("^" + updateRegex + "$");
-    //   checkUpdateRegex.test(regexConvertText)
-    //     ? setCheckValue(true)
-    //     : setCheckValue(false);
-    //   setRegex(checkUpdateRegex);
-    // } else {
-    // regexValue.test(regexConvertText)
-    //   ? setCheckValue(true)
-    //   : setCheckValue(false);
+    const regexValue = new RegExp("^" + regexMakingValue + `$`);
     setRegex(regexValue);
-    // }
-    // setRegex(regexValue);
-    console.log(updateRegex);
-  }, [regexConvertText, startEndValue, updateRegex]);
-  // convert regex to string
+    //  separeate regex group
+    setSettingRegex(settingsGroup);
+  }, [regexConvertText]);
 
   // Initial  update regx value get
   const regexToString = regex.toString();
-
   let regexString = "";
   for (let i = 1; i < regexToString.toString().length - 1; i++) {
     regexString = regexString + regexToString[i];
   }
-  const handleContentChange = (event) => {
-    console.log(event.target.textContent);
-    setContent(event.target.textContent);
-    const checkUpdateRegex = new RegExp(event.target.textContent);
-    checkUpdateRegex.test(regexConvertText)
-      ? setCheckValue(true)
-      : setCheckValue(false);
-    // checkingRegex(testValue, "updateText");
-  };
-  // regex check if regex valid return true or false
-  const checkingRegex = (value, type) => {
-    // if (type == "normalText") {
-    //   // console.log("my test value is back", value, regex.test(value), regex);
-    //   regex.test(value) ? setCheckValue(true) : setCheckValue(false);
-    // } else {
-    //   // create update regex value
-    //   const checkUpdateRegex = new RegExp(content);
-    //   checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
-    // }
-  };
-  const [settingToggle, setSettingToggle] = useState(null);
-
-  useEffect(() => {
-    const checkUpdateRegex = new RegExp("^" + updateRegex.join("") + "$");
-    // checkUpdateRegex.test(regexConvertText)
-    //   ? setCheckValue(true)
-    //   : setCheckValue(false);
-    setRegex(checkUpdateRegex);
-  }, [updateRegex]);
-  const [customUpRegex, setCustomUpRegex] = useState(null | {});
 
   const handleCustomUpdate = (item, index) => {
     let rangeValue = "";
@@ -168,36 +75,30 @@ export default function Home() {
       avoidValue = item;
     }
     if (!updateRegex.length) {
-      const mapData = settingRegex.map((item, i) => {
+      const regexUpdateData = settingRegex.map((item, i) => {
         if (i == index) {
-          console.log(avoidValue);
           return avoidValue;
         } else {
           return item;
         }
       });
-      // regexs = new RegExp("^" + mapData.join("") + "$");
-      setUpdateRegex(mapData);
+      const checkUpdateRegex = new RegExp("^" + regexUpdateData.join("") + "$");
+      setRegex(checkUpdateRegex);
+      setUpdateRegex(regexUpdateData);
     } else {
       updateRegex[index] = avoidValue;
-      setUpdateRegex(updateRegex);
-      setRegex(updateRegex.join(""));
-      // console.log(updateRegex.join(""));
-      // regexs = new RegExp("^" + updateRegex.join("") + "$");
+      const checkUpdateRegex = new RegExp("^" + updateRegex.join("") + "$");
+      setRegex(checkUpdateRegex);
     }
   };
-  console.log(updateRegex);
+
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
       <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 flex space-x-2 border-none outline-none   relative">
         <div className="flex space-x-2">
           <h1 className="capitalize">regex:</h1>
-          <h1
-            contentEditable={true}
-            onInput={handleContentChange}
-            suppressContentEditableWarning={true}
-          >
+          <h1 contentEditable={true} suppressContentEditableWarning={true}>
             {!regexConvertText ? "" : regexString}
           </h1>
         </div>
@@ -247,6 +148,7 @@ export default function Home() {
           <input
             className="w-full focus:outline-none border-b-2 "
             placeholder="specify string to match "
+            readOnly={updateRegex.length > 0 ? true : false}
             onChange={(e) => {
               setTestValue(e.target.value);
               setRegexConvertText(e.target.value);
@@ -360,32 +262,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-
-      {/* start and end value given here  */}
-      {/* <div className="flex justify-between">
-        <button
-          className="border text-green-600 bg-gray-50 px-5 py-2 "
-          onClick={(e) => {
-            setStartEndValue({
-              ...startEndValue,
-              start: "f",
-            });
-          }}
-        >
-          start with f
-        </button>
-        <button
-          className="border text-green-600 bg-gray-50 px-5 py-2 "
-          onClick={(e) => {
-            setStartEndValue({
-              ...startEndValue,
-              end: "b",
-            });
-          }}
-        >
-          end with with b
-        </button>
-      </div> */}
     </main>
   );
 }
