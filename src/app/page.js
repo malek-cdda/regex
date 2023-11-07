@@ -51,7 +51,10 @@ export default function Home() {
   const handleCustomUpdate = (item, index) => {
     let rangeValue = "";
     let avoidValue = "";
-    console.log(customUpRegex);
+    if (!customUpRegex) {
+      alert("avoid");
+      return;
+    }
     if (customUpRegex[index + 1]) {
       if (customUpRegex[index] >= customUpRegex[index + 1]) {
         alert(
@@ -95,7 +98,7 @@ export default function Home() {
       }
     }
     if (!updateRegex.length) {
-      const regexUpdateData = settingRegex.map((item, idx) => {
+      const regexUpdateData = arr.map((item, idx) => {
         if (idx == index) {
           return avoidValue;
         } else {
@@ -112,7 +115,7 @@ export default function Home() {
     }
     setCustomUpRegex({});
   };
-
+  console.log(customUpRegex);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -234,7 +237,7 @@ export default function Home() {
                 />
 
                 <input
-                  placeholder="enter avoid word"
+                  placeholder="enter avoid letter"
                   className="border py-4 px-3"
                   onChange={(e) => {
                     setCustomUpRegex({
