@@ -1,7 +1,5 @@
 "use client";
-
 import { AiFillInfoCircle } from "react-icons/ai";
-
 import { useEffect, useState } from "react";
 import { separateCharacter } from "@/components/regex/separateCharacter";
 import { regexProcess } from "@/components/regex/regexProcess";
@@ -50,7 +48,8 @@ export default function Home() {
     regexString = regexString + regexToString[i];
   }
 
-  const handleCustomUpdate = async (item, index, conditionValue) => {
+  const handleCustomUpdate = async (e, item, index, conditionValue) => {
+    e.preventDefault();
     if (!customUpRegex) {
       alert("avoid");
       return;
@@ -62,10 +61,10 @@ export default function Home() {
     );
     // avoid letter/word check here
     let conditionData = conditionValue ? conditionValue : "[$]";
-
     const avoidValue = await avoidLetterCheck(
-      customUpRegex[index + 2],
-      customUpRegex[index + 3],
+      customUpRegex[index + 2], //avoid letter
+      customUpRegex[index + 3], // avoid word
+      customUpRegex[index + 4], // structure value
       rangeValue,
       item,
       conditionData
@@ -92,6 +91,8 @@ export default function Home() {
       [index]: "",
       [index + 1]: "",
       [index + 2]: "",
+      [index + 3]: "",
+      [index + 4]: "",
     });
   };
   // useEffect(() => {
@@ -185,13 +186,19 @@ export default function Home() {
           >
             <h1>{item}</h1>
             {index == settingToggle && (
-              <div className="absolute top-0 right-1 flex flex-col space-y-1 bg-white w-5/12 ">
+              <form
+                className="absolute top-0 right-1   flex flex-col space-y-1 bg-white w-5/12"
+                onSubmit={(e) =>
+                  handleCustomUpdate(e, item, index, settingRegex[index + 1])
+                }
+              >
                 <input
                   placeholder="regex minimum value length"
                   className="border py-4 px-3"
                   type="number"
                   min="1"
                   minLength="1"
+                  required
                   value={customUpRegex[index] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
@@ -206,6 +213,7 @@ export default function Home() {
                   min="1"
                   minLength="1"
                   type="number"
+                  required
                   value={customUpRegex[index + 1] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
@@ -218,11 +226,24 @@ export default function Home() {
                 <input
                   placeholder="enter avoid letter"
                   className="border py-4 px-3"
+                  required
                   value={customUpRegex[index + 2] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
                       ...customUpRegex,
                       [index + 2]: e.target.value,
+                    });
+                  }}
+                />
+                <input
+                  placeholder="enter avoid word"
+                  className="border py-4 px-3"
+                  required
+                  value={customUpRegex[index + 3] || ""}
+                  onChange={(e) => {
+                    setCustomUpRegex({
+                      ...customUpRegex,
+                      [index + 3]: e.target.value,
                     });
                   }}
                 />
@@ -233,7 +254,7 @@ export default function Home() {
                     onChange={(e) => {
                       setCustomUpRegex({
                         ...customUpRegex,
-                        [index + 3]: e.target.value,
+                        [index + 4]: e.target.value,
                       });
                     }}
                   >
@@ -246,13 +267,14 @@ export default function Home() {
                 }
 
                 <button
-                  onClick={() => {
-                    handleCustomUpdate(item, index, settingRegex[index + 1]);
-                  }}
+                  className="border hover:underline py-2 px-3 text-green-400"
+                  // onClick={() => {
+
+                  // }}
                 >
                   submit
                 </button>
-              </div>
+              </form>
             )}
             <button
               className="text-green-500  text-lg"
