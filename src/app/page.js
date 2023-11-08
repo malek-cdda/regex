@@ -95,11 +95,12 @@ export default function Home() {
       [index + 4]: "",
     });
   };
-  // useEffect(() => {
-  //   if (regex && testValue) {
-  //     console.log(regex.test(testValue));
-  //   }
-  // }, [testValue]);
+  useEffect(() => {
+    if (regex && testValue) {
+      const check = regex.test(testValue);
+      setCheckValue(check);
+    }
+  }, [testValue]);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
