@@ -61,12 +61,15 @@ export default function Home() {
     );
     // avoid letter/word check here
     let conditionData = conditionValue ? conditionValue : "[$]";
+    let favouriteStructure = customUpRegex[index + 4]
+      ? customUpRegex[index + 4]
+      : item;
     const avoidValue = await avoidLetterCheck(
       customUpRegex[index + 2], //avoid letter
       customUpRegex[index + 3], // avoid word
       customUpRegex[index + 4], // structure value
       rangeValue,
-      item,
+      favouriteStructure,
       conditionData
     );
     if (!updateRegex.length) {
@@ -99,8 +102,10 @@ export default function Home() {
     if (regex && testValue) {
       const check = regex.test(testValue);
       setCheckValue(check);
+      console.log(check);
     }
   }, [testValue]);
+  console.log(regex);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
