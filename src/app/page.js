@@ -23,7 +23,7 @@ export default function Home() {
   const [settingRegex, setSettingRegex] = useState([]);
   const [updateRegex, setUpdateRegex] = useState([]);
   const [settingToggle, setSettingToggle] = useState(null);
-  const [customUpRegex, setCustomUpRegex] = useState(null | {});
+  const [customUpRegex, setCustomUpRegex] = useState({});
   const [arr, setArr] = useState([]);
   useEffect(() => {
     //  separate all string character function
@@ -50,7 +50,7 @@ export default function Home() {
     regexString = regexString + regexToString[i];
   }
 
-  const handleCustomUpdate = async (item, index) => {
+  const handleCustomUpdate = async (item, index, conditionValue) => {
     if (!customUpRegex) {
       alert("avoid");
       return;
@@ -61,11 +61,14 @@ export default function Home() {
       customUpRegex[index + 1]
     );
     // avoid letter/word check here
+    let conditionData = conditionValue ? conditionValue : "[$]";
+
     const avoidValue = await avoidLetterCheck(
       customUpRegex[index + 2],
       customUpRegex[index + 3],
       rangeValue,
-      item
+      item,
+      conditionData
     );
     if (!updateRegex.length) {
       const regexUpdateData = arr.map((item, idx) => {
@@ -84,13 +87,18 @@ export default function Home() {
       setRegex(checkUpdateRegex);
     }
     // const updateRegex = await updateRegexData()
-    setCustomUpRegex({});
+    setCustomUpRegex({
+      ...customUpRegex,
+      [index]: "",
+      [index + 1]: "",
+      [index + 2]: "",
+    });
   };
-  useEffect(() => {
-    if (regex && testValue) {
-      console.log(regex.test(testValue));
-    }
-  }, [testValue, regex]);
+  // useEffect(() => {
+  //   if (regex && testValue) {
+  //     console.log(regex.test(testValue));
+  //   }
+  // }, [testValue]);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -155,12 +163,6 @@ export default function Home() {
               // checkingRegex(e.target.value, "normalText");
             }}
           />
-          <span className="text-[8px] text-red-400  ">
-            {checkValue == false ? "match the requested form" : ""}
-          </span>
-          <h6 className="text-sm">
-            {checkValue == false ? "not matching" : ""}
-          </h6>
         </div>
         <div className="group   absolute  top-1 right-7">
           <span className="cursor-pointer">
@@ -190,6 +192,7 @@ export default function Home() {
                   type="number"
                   min="1"
                   minLength="1"
+                  value={customUpRegex[index] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
                       ...customUpRegex,
@@ -203,6 +206,7 @@ export default function Home() {
                   min="1"
                   minLength="1"
                   type="number"
+                  value={customUpRegex[index + 1] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
                       ...customUpRegex,
@@ -214,6 +218,7 @@ export default function Home() {
                 <input
                   placeholder="enter avoid letter"
                   className="border py-4 px-3"
+                  value={customUpRegex[index + 2] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
                       ...customUpRegex,
@@ -242,7 +247,7 @@ export default function Home() {
 
                 <button
                   onClick={() => {
-                    handleCustomUpdate(item, index);
+                    handleCustomUpdate(item, index, settingRegex[index + 1]);
                   }}
                 >
                   submit
