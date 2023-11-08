@@ -9,6 +9,8 @@ import {
   specialSignCharacters,
   userFavourStructureValue,
 } from "@/components/regex/regexData";
+import { rangeCheck } from "@/components/regex/rangeCheck";
+import { avoidLetterCheck } from "@/components/regex/avoidLetterCheck";
 
 export default function Home() {
   let [regex, setRegex] = useState("");
@@ -48,55 +50,23 @@ export default function Home() {
     regexString = regexString + regexToString[i];
   }
 
-  const handleCustomUpdate = (item, index) => {
-    let rangeValue = "";
-    let avoidValue = "";
+  const handleCustomUpdate = async (item, index) => {
     if (!customUpRegex) {
       alert("avoid");
       return;
     }
-    if (customUpRegex[index + 1]) {
-      if (customUpRegex[index] >= customUpRegex[index + 1]) {
-        alert(
-          "minimum value is not greater than maximum value or same is not grater than value"
-        );
-        return;
-      } else {
-        rangeValue = `{${customUpRegex[index]},${customUpRegex[index + 1]}}`;
-      }
-    } else {
-      if (window.confirm("are you sure you want to  infinite value accept")) {
-        if (!customUpRegex[index]) {
-          rangeValue = `{1,}`;
-          return;
-        } else {
-          rangeValue = `{${customUpRegex[index]},}`;
-        }
-      } else {
-        rangeValue = `{1,}`;
-      }
-    }
-    if (customUpRegex[index + 2]) {
-      if (customUpRegex[index + 3]) {
-        avoidValue = `((?!.*[${customUpRegex[index + 2]}])${
-          customUpRegex[index + 3]
-        }${rangeValue})`;
-        // settingRegex[index] = customUpRegex[index + 3];
-        // setSettingRegex([...settingRegex]);
-      } else {
-        avoidValue = `((?!.*[${
-          customUpRegex[index + 2]
-        }])${item}${rangeValue})`;
-      }
-    } else {
-      if (customUpRegex[index + 3]) {
-        avoidValue = `${customUpRegex[index + 3]}${rangeValue}`;
-        // settingRegex[index] = customUpRegex[index + 3];
-        // setSettingRegex([...settingRegex]);
-      } else {
-        avoidValue = `${item}${rangeValue}`;
-      }
-    }
+    // maxvalue and minvalue check here and set range value
+    const rangeValue = await rangeCheck(
+      customUpRegex[index],
+      customUpRegex[index + 1]
+    );
+    // avoid letter/word check here
+    const avoidValue = await avoidLetterCheck(
+      customUpRegex[index + 2],
+      customUpRegex[index + 3],
+      rangeValue,
+      item
+    );
     if (!updateRegex.length) {
       const regexUpdateData = arr.map((item, idx) => {
         if (idx == index) {
@@ -113,9 +83,14 @@ export default function Home() {
       const checkUpdateRegex = new RegExp("^" + updateRegex.join("") + "$");
       setRegex(checkUpdateRegex);
     }
+    // const updateRegex = await updateRegexData()
     setCustomUpRegex({});
   };
-  console.log(customUpRegex);
+  useEffect(() => {
+    if (regex && testValue) {
+      console.log(regex.test(testValue));
+    }
+  }, [testValue, regex]);
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -143,10 +118,10 @@ export default function Home() {
             placeholder="test value"
             onChange={(e) => {
               setTestValue(e.target.value);
-              checkingRegex(
-                e.target.value,
-                content ? "updateText" : "normalText"
-              );
+              // checkingRegex(
+              //   e.target.value,
+              //   content ? "updateText" : "normalText"
+              // );
             }}
           />
           <span className="text-[8px] text-red-400  ">
