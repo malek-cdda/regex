@@ -207,7 +207,6 @@ export default function Home() {
                   type="number"
                   min="1"
                   minLength="1"
-                  required
                   value={customUpRegex[index] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
@@ -234,7 +233,6 @@ export default function Home() {
                 <input
                   placeholder="enter avoid letter"
                   className="border py-4 px-3"
-                  required
                   value={customUpRegex[index + 2] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
@@ -246,7 +244,6 @@ export default function Home() {
                 <input
                   placeholder="enter avoid word"
                   className="border py-4 px-3"
-                  required
                   value={customUpRegex[index + 3] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
