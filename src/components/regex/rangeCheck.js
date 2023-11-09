@@ -10,8 +10,6 @@ export async function rangeCheck(min, max) {
       alert("minimum value must be less than maximum value");
       rangeValue = `{1}`;
     }
-  } else {
-    rangeValue = `{1}`;
   }
 
   return rangeValue;
