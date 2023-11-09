@@ -264,9 +264,9 @@ export default function Home() {
                       });
                     }}
                   >
-                    {userFavourStructureValue.map((item, index) => (
-                      <option key={index} value={item}>
-                        {item}
+                    {userFavourStructureValue.map((items, index) => (
+                      <option key={index} value={items}>
+                        {items}
                       </option>
                     ))}
                   </select>
@@ -288,7 +288,7 @@ export default function Home() {
                 setSettingToggle(index);
               }}
             >
-              setting
+              {settingToggle == index ? "open" : "setting"}
             </button>
           </div>
         ))}
