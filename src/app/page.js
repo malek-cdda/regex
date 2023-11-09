@@ -219,10 +219,9 @@ export default function Home() {
                 <input
                   placeholder="regex maximum value length"
                   className="border py-4 px-3"
-                  min="1"
+                  min="2"
                   minLength="1"
                   type="number"
-                  required
                   value={customUpRegex[index + 1] || ""}
                   onChange={(e) => {
                     setCustomUpRegex({
