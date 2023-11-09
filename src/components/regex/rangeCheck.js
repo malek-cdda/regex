@@ -4,13 +4,15 @@ export async function rangeCheck(min, max) {
     rangeValue = `{${min ? min : 1}}`;
     // alert("minimum");
   } else if (min && max) {
-    if (min < max) rangeValue = `{${min},${max}}`;
-    else {
+    if (min < max) {
+      rangeValue = `{${min},${max}}`;
+    } else if (min > max) {
       alert("minimum value must be less than maximum value");
-      return;
+      rangeValue = `{1}`;
     }
   } else {
     rangeValue = `{1}`;
   }
+
   return rangeValue;
 }
