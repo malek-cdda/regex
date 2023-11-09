@@ -36,7 +36,6 @@ export const specialSignCharacters = [
   "`",
 ];
 export const userFavourStructureValue = [
-  "",
   "[a-z]",
   "[A-Z]",
   "[1-9]",

@@ -198,6 +198,9 @@ export default function Home() {
                   handleCustomUpdate(e, item, index, settingRegex[index + 1])
                 }
               >
+                <h1 className="py-3 px-4 text-center bg-gray-50 mb-2 text-xl">
+                  selectedItem : {item}
+                </h1>
                 <input
                   placeholder="regex minimum value length"
                   className="border py-4 px-3"
@@ -264,19 +267,22 @@ export default function Home() {
                       });
                     }}
                   >
-                    {userFavourStructureValue.map((items, index) => (
-                      <option key={index} value={items}>
-                        {items}
-                      </option>
-                    ))}
+                    <option value={item} selected={item}>
+                      {item}
+                    </option>
+                    {userFavourStructureValue
+                      .filter((i, idx) => i != item)
+                      .map((items, index) => (
+                        <option key={index} value={items}>
+                          {items}
+                        </option>
+                      ))}
                   </select>
                 }
 
                 <button
                   className="border hover:underline py-2 px-3 text-green-400"
-                  // onClick={() => {
-
-                  // }}
+                  type="submit"
                 >
                   submit
                 </button>
