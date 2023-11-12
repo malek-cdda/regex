@@ -47,7 +47,7 @@ export const regexProcess = (value, specialCharacters) => {
   }
 
   regexMakingValue = regexMakingValue + upperAcceptValue;
-  
+
   let acceptValue3 = "";
   let acceptValue1 = "";
   let acceptValue2 = "";
@@ -127,7 +127,7 @@ export const regexProcess = (value, specialCharacters) => {
     acceptValue3 +
     regexMakingValue +
     newAcceptValue;
-  console.log(regexMakingValue);
+  // console.log(regexMakingValue);
   return { regexMakingValue, newLen };
 };
 

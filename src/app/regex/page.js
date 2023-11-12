@@ -150,9 +150,7 @@ const Page = () => {
       const regex = new RegExp(createRegexString);
       setCheckRegex(regex);
       setError("");
-      console.log(regex);
     } catch (error) {
-      console.log(error.message);
       setError(error.message);
     }
   };

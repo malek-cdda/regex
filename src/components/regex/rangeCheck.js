@@ -1,6 +1,7 @@
 export async function rangeCheck(min, max) {
   const newMin = Number(min);
   const newMax = Number(max);
+  console.log(newMax, newMin);
   let rangeValue = "";
 
   if ((!newMin && !newMax) || (newMin && !newMax)) {
@@ -9,13 +10,11 @@ export async function rangeCheck(min, max) {
   } else if (newMin && newMax) {
     if (newMin < newMax) {
       rangeValue = `{${newMin},${newMax}}`;
-    } else {
-      console.log("min", typeof newMin, "max", typeof newMax);
-      alert("minimum value must be less than maximum value");
-      return;
+    } else if (newMin >= newMax) {
+      rangeValue = `{1,}`;
     }
   } else {
-    rangeValue = `{1}`;
+    rangeValue = `{1,${newMax}}`;
   }
   return rangeValue;
 }

@@ -33,12 +33,12 @@ export default function Home() {
     // // end value set
     // let endValue = startEndValue.end ? `[${startEndValue?.end}]` : "";
     // setRegx value length
-    console.log(regexMakingValue);
+
     //  making regex process
     if (regexMakingValue) {
       const regexValue = new RegExp("^" + regexMakingValue + `{${newLen}}$`);
-      console.log(testValue, regexValue);
-      regexValue.test(testValue) ? console.log("true") : console.log("false");
+
+      // regexValue.test(testValue) ? console.log("true") : console.log("false");
       setRegex(regexValue);
     }
   }, [regexConvertText, testValue]);
@@ -65,7 +65,7 @@ export default function Home() {
       checkUpdateRegex.test(value) ? setCheckValue(true) : setCheckValue(false);
     }
   };
-  console.log(regex);
+  // console.log(regex);
   //   regex.test(testValue) ? console.log("true") : console.log("false");
 
   return (

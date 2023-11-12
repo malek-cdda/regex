@@ -8,7 +8,7 @@ import {
   userFavourStructureValue,
 } from "@/components/regex/regexData";
 import { rangeCheck } from "@/components/regex/rangeCheck";
-import { avoidLetterCheck } from "@/components/regex/avoidLetterCheck";
+import { avoidAndAddedLetterCheck } from "@/components/regex/avoidLetterCheck";
 
 export default function Home() {
   let [regex, setRegex] = useState("");
@@ -23,6 +23,7 @@ export default function Home() {
   const [settingToggle, setSettingToggle] = useState(null);
   const [customUpRegex, setCustomUpRegex] = useState({});
   const [arr, setArr] = useState([]);
+  const [matchValue, setMatchValue] = useState();
   useEffect(() => {
     //  separate all string character function
     const separateWord = separateCharacter(
@@ -59,23 +60,39 @@ export default function Home() {
       customUpRegex[index],
       customUpRegex[index + 1]
     );
-    // avoid letter/word check here
+    // if not find any special character then it accept "$"
     let conditionData = conditionValue ? conditionValue : "[$]";
-    let favouriteStructure = customUpRegex[index + 4]
-      ? customUpRegex[index + 4]
+    // avoid letter and word check here
+    let avoidLetterCheckValue = customUpRegex[index + 2]
+      ? customUpRegex[index + 2]
+      : "";
+    // avoid word check here
+    let avoidWordCheckValue = customUpRegex[index + 3]
+      ? customUpRegex[index + 3]
+      : "";
+    // added your favourite match word
+    let addedWord = customUpRegex[index + 4] ? customUpRegex[index + 4] : "";
+
+    // user can added favourite structure
+    let favouriteStructure = customUpRegex[index + 5]
+      ? customUpRegex[index + 5]
       : item;
-    const avoidValue = await avoidLetterCheck(
-      customUpRegex[index + 2], //avoid letter
-      customUpRegex[index + 3], // avoid word
-      customUpRegex[index + 4], // structure value
+
+    // avoid letter/word check here
+    const avoidAddedValue = await avoidAndAddedLetterCheck(
+      avoidLetterCheckValue, //avoid letter
+      avoidWordCheckValue, // avoid word
+      addedWord, // added word
+      customUpRegex[index + 5], // structure value
       rangeValue,
       favouriteStructure,
       conditionData
     );
+
     if (!updateRegex.length) {
       const regexUpdateData = arr.map((item, idx) => {
         if (idx == index) {
-          return avoidValue;
+          return avoidAddedValue;
         } else {
           return item;
         }
@@ -84,7 +101,7 @@ export default function Home() {
       setRegex(checkUpdateRegex);
       setUpdateRegex(regexUpdateData);
     } else {
-      updateRegex[index] = avoidValue;
+      updateRegex[index] = avoidAddedValue;
       const checkUpdateRegex = new RegExp("^" + updateRegex.join("") + "$");
       setRegex(checkUpdateRegex);
     }
@@ -102,10 +119,9 @@ export default function Home() {
     if (regex && testValue) {
       const check = regex.test(testValue);
       setCheckValue(check);
-      console.log(check);
     }
   }, [testValue]);
-  console.log(regex);
+
   return (
     <main className="  p-24">
       {/* regex value show code here  */}
@@ -253,13 +269,37 @@ export default function Home() {
                   }}
                 />
 
+                <input
+                  placeholder="enter acceptable word"
+                  className="border py-4 px-3"
+                  // required={matchValue}
+                  value={customUpRegex[index + 4] || ""}
+                  onChange={(e) => {
+                    setCustomUpRegex({
+                      ...customUpRegex,
+                      [index + 4]: e.target.value,
+                    });
+                    console.log(
+                      "--",
+                      customUpRegex[index + 3] === e.target.value
+                    );
+                    if (customUpRegex[index + 3] === e.target.value) {
+                      setMatchValue(true);
+                    } else {
+                      setMatchValue(false);
+                    }
+                  }}
+                />
+
+                {matchValue && <span>Matched</span>}
+
                 {
                   <select
                     className="border py-4 px-3"
                     onChange={(e) => {
                       setCustomUpRegex({
                         ...customUpRegex,
-                        [index + 4]: e.target.value,
+                        [index + 5]: e.target.value,
                       });
                     }}
                   >

@@ -18,7 +18,6 @@ const Page = () => {
       setRegex(regex);
       setError(false);
     } catch (error) {
-      console.log(error.message);
       setError(true);
     }
   }, [checkValue, flag]);
@@ -121,7 +120,6 @@ const Page = () => {
           <input
             className="border-2 my-5"
             onChange={(e) => {
-              console.log(regex.test(e.target.value));
               setRegexCheck(regex.test(e.target.value));
             }}
           ></input>
