@@ -23,7 +23,7 @@ export default function Home() {
   const [settingToggle, setSettingToggle] = useState(null);
   const [customUpRegex, setCustomUpRegex] = useState({});
   const [arr, setArr] = useState([]);
-  const [matchValue, setMatchValue] = useState();
+  const [matchValue, setMatchValue] = useState(false);
   useEffect(() => {
     //  separate all string character function
     const separateWord = separateCharacter(
@@ -48,9 +48,14 @@ export default function Home() {
   for (let i = 1; i < regexToString.toString().length - 1; i++) {
     regexString = regexString + regexToString[i];
   }
-
+  const [newMatch, setNewMatch] = useState(false);
   const handleCustomUpdate = async (e, item, index, conditionValue) => {
     e.preventDefault();
+    if (matchValue) {
+      setNewMatch(true);
+      return;
+    }
+    setNewMatch(false);
     if (!customUpRegex) {
       alert("avoid");
       return;
@@ -124,6 +129,9 @@ export default function Home() {
 
   return (
     <main className="  p-24">
+      <h1 className="text-center border py-5 font-bold text-xl ">
+        Regex Generator
+      </h1>
       {/* regex value show code here  */}
       <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 flex space-x-2 border-none outline-none   relative">
         <div className="flex space-x-2">
@@ -204,16 +212,14 @@ export default function Home() {
         {settingRegex.map((item, index) => (
           <div
             key={index}
-            className="flex justify-between border py-4 px-5 my-5   w-1/2 "
-          >
+            className="flex justify-between border py-4 px-5 my-5   w-1/2 ">
             <h1>{item}</h1>
             {index == settingToggle && (
               <form
                 className="absolute top-0 right-1   flex flex-col space-y-1 bg-white w-5/12"
                 onSubmit={(e) =>
                   handleCustomUpdate(e, item, index, settingRegex[index + 1])
-                }
-              >
+                }>
                 <h1 className="py-3 px-4 text-center bg-gray-50 mb-2 text-xl">
                   selectedItem : {item}
                 </h1>
@@ -271,7 +277,9 @@ export default function Home() {
 
                 <input
                   placeholder="enter acceptable word"
-                  className="border py-4 px-3"
+                  className={` ${
+                    newMatch ? "border border-red-500" : "border"
+                  }  py-4 px-3`}
                   // required={matchValue}
                   value={customUpRegex[index + 4] || ""}
                   onChange={(e) => {
@@ -291,7 +299,7 @@ export default function Home() {
                   }}
                 />
 
-                {matchValue && <span>Matched</span>}
+                {matchValue && <span>Matched value not submitted</span>}
 
                 {
                   <select
@@ -301,8 +309,7 @@ export default function Home() {
                         ...customUpRegex,
                         [index + 5]: e.target.value,
                       });
-                    }}
-                  >
+                    }}>
                     <option value={item} selected={item}>
                       {item}
                     </option>
@@ -318,8 +325,7 @@ export default function Home() {
 
                 <button
                   className="border hover:underline py-2 px-3 text-green-400"
-                  type="submit"
-                >
+                  type="submit">
                   submit
                 </button>
               </form>
@@ -328,13 +334,17 @@ export default function Home() {
               className="text-green-500  text-lg"
               onClick={() => {
                 setSettingToggle(index);
-              }}
-            >
+              }}>
               {settingToggle == index ? "open" : "setting"}
             </button>
           </div>
         ))}
       </div>
+      {settingRegex.length > 0 && (
+        <div className="circle-parent">
+          <span className="circle1"></span>
+        </div>
+      )}
     </main>
   );
 }
