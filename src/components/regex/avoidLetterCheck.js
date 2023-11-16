@@ -9,6 +9,7 @@ export const avoidAndAddedLetterCheck = async (
 ) => {
   let filters = "";
   let avoidValue = "";
+  console.log(value3, conditionValue);
   // console.log(conditionValue);
   if (conditionValue !== undefined) {
     const filterCondtion = [...conditionValue].map((item) => {
@@ -24,30 +25,16 @@ export const avoidAndAddedLetterCheck = async (
     filters = filterCondtion.filter((item) => item !== "").join("");
     // console.log("^", filters);
   }
-  if (avoidWord) {
-    if (value3 && conditionValue) {
-      avoidValue = `(?=[${"^" + filters[0]}]${"*" + addedWord})(?![${
-        "^" + filters[0]
-      }]${"*" + avoidWord})(?![${
-        "^" + filters[0]
-      }]*[${avoidLetter}])${item}${rangeValue}`;
-      //   settingRegex[index] = value3;
-      //   setSettingRegex([...settingRegex]);
-    } else {
-      avoidValue = `(?=[${"^" + filters[0]}]${"*" + addedWord})(?![${
-        "^" + filters[0]
-      }]${"*" + avoidWord})(?![${
-        "^" + filters[0]
-      }]*[${avoidLetter}])${item}${rangeValue}`;
-    }
-  } else {
-    if (value3) {
-      avoidValue = `${value3}${rangeValue}`;
-      // settingRegex[index] = value3;
-      // setSettingRegex([...settingRegex]);
-    } else {
-      avoidValue = `${item}${rangeValue}`;
-    }
-  }
+  // avoid letter condition here
+  let avoidLetterValue = avoidLetter
+    ? `(?![${"^" + filters[0]}]*[${avoidLetter}])`
+    : "";
+  // add your favourite word
+  let addWord = addedWord ? `(?=[${"^" + filters[0]}]*[${addedWord}])` : "";
+  // skip word condition here
+  let avoidWordUser = avoidWord ? `(?![${"^" + filters[0]}]*${avoidWord})` : "";
+  // regex formate string making
+  avoidValue = `${addWord}${avoidWordUser}${avoidLetterValue}${item}${rangeValue}`;
+
   return avoidValue;
 };

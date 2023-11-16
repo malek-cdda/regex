@@ -22,6 +22,4 @@ when we are going to email , password validation we need regex. for this i think
 7. if you also see in details you can hover right side info button it show you lot of information
 8. when you edit any setting you not change regex making field
 
-<!-- i found some limitation  -->
-
-1.  group not match ignore word
+## those person who have no idea about regex he/she can also create regex using this generator
