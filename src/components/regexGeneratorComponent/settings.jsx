@@ -58,7 +58,9 @@ const Settings = ({
 
           <input
             placeholder="enter avoid letter"
-            className="border py-4 px-3"
+            className={` ${
+              newMatch ? "border border-red-500" : "border"
+            }  py-4 px-3`}
             value={customUpRegex[index + 2] || ""}
             onChange={(e) => {
               setCustomUpRegex({
