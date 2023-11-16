@@ -1,7 +1,7 @@
 export async function rangeCheck(min, max) {
   const newMin = Number(min);
   const newMax = Number(max);
-  console.log(newMax, newMin);
+
   let rangeValue = "";
 
   if ((!newMin && !newMax) || (newMin && !newMax)) {

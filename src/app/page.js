@@ -122,79 +122,21 @@ export default function Home() {
         Regex Generator
       </h1>
       {/* regex value show code here  */}
-      <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 flex space-x-2 border-none outline-none   relative">
-        <div className="flex space-x-2">
-          <h1 className="capitalize">regex:</h1>
-          <h1 contentEditable={true} suppressContentEditableWarning={true}>
-            {!regexConvertText ? "" : regexString}
-          </h1>
-        </div>
-        <div className="group   absolute  top-1 right-7">
-          <span className="cursor-pointer">
-            <AiFillInfoCircle />
-          </span>
-          <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
-            see the regex string that is generated from the specified test value
-          </div>
-        </div>
-      </div>
+      <RegexValueShow
+        regexConvertText={regexConvertText}
+        regexString={regexString}
+      />
       {/* regex value for testing  */}
-      <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
-        <div>
-          <input
-            className="w-full focus:outline-none border-b-2 "
-            placeholder="test value"
-            onChange={(e) => {
-              setTestValue(e.target.value);
-              // checkingRegex(
-              //   e.target.value,
-              //   content ? "updateText" : "normalText"
-              // );
-            }}
-          />
-          <span className="text-[8px] text-red-400  ">
-            {checkValue == false ? "match the requested form" : ""}
-          </span>
-          <h6 className="text-sm">
-            {checkValue == false ? "not matching" : ""}
-          </h6>
-        </div>
-        <div className="group   absolute  top-1 right-7">
-          <span className="cursor-pointer">
-            <AiFillInfoCircle />
-          </span>
-          <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
-            specified test value does not match the generated regular
-            expression, the description of the regular expression will be
-            displayed as a validation error directly below the te
-          </div>
-        </div>
-      </div>
+
+      <RegexValueTest setTestValue={setTestValue} checkValue={checkValue} />
       {/* making regex value for imput  */}
-      <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
-        <div>
-          <input
-            className="w-full focus:outline-none border-b-2 "
-            placeholder="specify string to match "
-            readOnly={updateRegex.length > 0 ? true : false}
-            onChange={(e) => {
-              setTestValue(e.target.value);
-              setRegexConvertText(e.target.value);
-              // checkingRegex(e.target.value, "normalText");
-            }}
-          />
-        </div>
-        <div className="group   absolute  top-1 right-7">
-          <span className="cursor-pointer">
-            <AiFillInfoCircle />
-          </span>
-          <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
-            specified test value does not match the generated regular
-            expression, the description of the regular expression will be
-            displayed as a validation error directly below the te
-          </div>
-        </div>
-      </div>
+
+      <RegexInputValueShow
+        updateRegex={updateRegex}
+        setTestValue={setTestValue}
+        setRegexConvertText={setRegexConvertText}
+      />
+
       {/* update regex value  */}
 
       <div className="  relative">
@@ -225,3 +167,93 @@ export default function Home() {
     </main>
   );
 }
+
+//  create regex give your string
+const RegexInputValueShow = ({
+  updateRegex,
+  setTestValue,
+  setRegexConvertText,
+}) => {
+  return (
+    <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
+      <div>
+        <input
+          className="w-full focus:outline-none border-b-2 "
+          placeholder="specify string to match "
+          readOnly={updateRegex.length > 0 ? true : false}
+          onChange={(e) => {
+            setTestValue(e.target.value);
+            setRegexConvertText(e.target.value);
+            // checkingRegex(e.target.value, "normalText");
+          }}
+        />
+      </div>
+      <div className="group   absolute  top-1 right-7">
+        <span className="cursor-pointer">
+          <AiFillInfoCircle />
+        </span>
+        <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
+          specified test value does not match the generated regular expression,
+          the description of the regular expression will be displayed as a
+          validation error directly below the te
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// show regex those you r build
+const RegexValueShow = ({ regexConvertText, regexString }) => {
+  return (
+    <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 flex space-x-2 border-none outline-none   relative">
+      <div className="flex space-x-2">
+        <h1 className="capitalize">regex:</h1>
+        <h1 contentEditable={true} suppressContentEditableWarning={true}>
+          {!regexConvertText ? "" : regexString}
+        </h1>
+      </div>
+      <div className="group   absolute  top-1 right-7">
+        <span className="cursor-pointer">
+          <AiFillInfoCircle />
+        </span>
+        <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
+          see the regex string that is generated from the specified test value
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const RegexValueTest = ({ setTestValue, checkValue }) => {
+  return (
+    <div className="text-lg py-3 px-5 shadow-md rounded-md my-5 relative  ">
+      <div>
+        <input
+          className="w-full focus:outline-none border-b-2 "
+          placeholder="test value"
+          onChange={(e) => {
+            setTestValue(e.target.value);
+            // checkingRegex(
+            //   e.target.value,
+            //   content ? "updateText" : "normalText"
+            // );
+          }}
+        />
+        <span className="text-[8px] text-red-400  ">
+          {checkValue == false ? "match the requested form" : ""}
+        </span>
+        <h6 className="text-sm">{checkValue == false ? "not matching" : ""}</h6>
+      </div>
+      <div className="group   absolute  top-1 right-7">
+        <span className="cursor-pointer">
+          <AiFillInfoCircle />
+        </span>
+        <div className="group-hover:flex hidden absolute border w-52 bg-black text-white px-2 py-5 -right-10 rounded-md z-50">
+          specified test value does not match the generated regular expression,
+          the description of the regular expression will be displayed as a
+          validation error directly below the te
+        </div>
+      </div>
+    </div>
+  );
+};

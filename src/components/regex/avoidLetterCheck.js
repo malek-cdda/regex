@@ -9,7 +9,7 @@ export const avoidAndAddedLetterCheck = async (
 ) => {
   let filters = "";
   let avoidValue = "";
-  console.log(value3, conditionValue);
+
   // console.log(conditionValue);
   if (conditionValue !== undefined) {
     const filterCondtion = [...conditionValue].map((item) => {

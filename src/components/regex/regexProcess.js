@@ -85,6 +85,6 @@ export const regexProcess = (value, specialCharacters) => {
       regexMakingValue = regexMakingValue + acceptValue;
     }
   });
-  console.log(arr);
+
   return { settingsGroup, regexMakingValue, arr };
 };

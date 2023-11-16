@@ -105,19 +105,18 @@ const Settings = ({
           {
             <select
               className="border py-4 px-3"
+              value={customUpRegex[index + 5]}
               onChange={(e) => {
                 setCustomUpRegex({
                   ...customUpRegex,
                   [index + 5]: e.target.value,
                 });
               }}>
-              <option value={item} selected={item}>
-                {item}
-              </option>
+              <option value={item}>{item}</option>
               {userFavourStructureValue
-                .filter((i, idx) => i != item)
-                .map((items, index) => (
-                  <option key={index} value={items}>
+                .filter((i, idx) => i !== item)
+                .map((items, idx) => (
+                  <option key={idx} value={items}>
                     {items}
                   </option>
                 ))}
