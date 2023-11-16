@@ -56,11 +56,21 @@ export default function Home() {
       setNewMatch(true);
       return;
     }
-    setNewMatch(false);
     if (!customUpRegex) {
       alert("avoid");
       return;
     }
+
+    if (customUpRegex[index + 2] && customUpRegex[index + 4]) {
+      for (let i = 0; i < customUpRegex[index + 2].length; i++) {
+        if (customUpRegex[index + 4].includes(customUpRegex[index + 2][i])) {
+          alert("avoid letter include in accept word so please change it ");
+          setNewMatch(true);
+          return;
+        }
+      }
+    }
+    setNewMatch(false);
     // maxvalue and minvalue check here and set range value
     const rangeValue = await rangeCheck(
       customUpRegex[index],
@@ -82,7 +92,7 @@ export default function Home() {
       favouriteStructure,
       conditionData // condion value
     );
-
+    //  check update regex length
     if (!updateRegex.length) {
       const regexUpdateData = arr.map((item, idx) => {
         if (idx == index) {
