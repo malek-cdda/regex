@@ -31,7 +31,7 @@ export const avoidAndAddedLetterCheck = async (
     ? `(?![${"^" + filters[0]}]*[${avoidLetter}])`
     : "";
   //   // add your favourite word
-  let addWord = addedWord ? `(?=[${"^" + filters[0]}]*[${addedWord}])` : "";
+  let addWord = addedWord ? `(?=[${"^" + filters[0]}]*${addedWord})` : "";
   let avoidWordUser = avoidWord ? `(?![${"^" + filters[0]}]*${avoidWord})` : "";
 
   avoidValue = `${addWord}${avoidWordUser}${avoidLetterValue}${item}${rangeValue}`;
